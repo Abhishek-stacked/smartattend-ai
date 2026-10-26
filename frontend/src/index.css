@@ -1,0 +1,165 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
+
+  /* Aurora indigo: the primary surface colour of the product. */
+  --color-brand-50: #eef1ff;
+  --color-brand-100: #e1e5ff;
+  --color-brand-200: #c7cdff;
+  --color-brand-300: #a5acff;
+  --color-brand-400: #8489fb;
+  --color-brand-500: #6c63f4;
+  --color-brand-600: #5a48e6;
+  --color-brand-700: #4c37c9;
+  --color-brand-800: #3f30a4;
+  --color-brand-900: #352c83;
+
+  /* Aqua accent: second stop of every gradient and the live-status highlight. */
+  --color-accent-50: #ecfeff;
+  --color-accent-100: #cffafe;
+  --color-accent-200: #a5f3fc;
+  --color-accent-300: #67e8f9;
+  --color-accent-400: #22d3ee;
+  --color-accent-500: #06b6d4;
+  --color-accent-600: #0891b2;
+  --color-accent-700: #0e7490;
+  --color-accent-800: #155e75;
+  --color-accent-900: #164e63;
+
+  /* Depth. Surfaces sit above the page instead of sitting flat on it. */
+  --shadow-surface: 0 1px 1px rgba(15, 23, 42, 0.04), 0 4px 10px -4px rgba(15, 23, 42, 0.08),
+    0 18px 40px -26px rgba(15, 23, 42, 0.3);
+  --shadow-lift: 0 2px 4px rgba(15, 23, 42, 0.05), 0 24px 44px -22px rgba(79, 70, 229, 0.45);
+  --shadow-float: 0 30px 70px -30px rgba(30, 27, 75, 0.55);
+  --shadow-glow: 0 0 0 1px rgba(108, 99, 244, 0.16), 0 14px 34px -14px rgba(90, 72, 230, 0.5);
+  --shadow-control: inset 0 1px 0 rgba(255, 255, 255, 0.32), 0 1px 2px rgba(15, 23, 42, 0.1),
+    0 8px 18px -12px rgba(79, 70, 229, 0.85);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply text-slate-900 antialiased;
+    background-color: #eef1fb;
+    background-image:
+      radial-gradient(48rem 34rem at 4% -8%, rgba(108, 99, 244, 0.32), transparent 60%),
+      radial-gradient(40rem 30rem at 92% -6%, rgba(34, 211, 238, 0.28), transparent 58%),
+      radial-gradient(44rem 32rem at 78% 24%, rgba(192, 132, 252, 0.2), transparent 60%),
+      radial-gradient(56rem 38rem at 34% 108%, rgba(99, 102, 241, 0.22), transparent 62%),
+      linear-gradient(180deg, #f6f7ff 0%, #eef1fb 38%, #f3f6ff 100%);
+    background-attachment: fixed;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+  }
+  ::selection {
+    @apply bg-brand-100 text-brand-900;
+  }
+}
+
+@layer components {
+  /* Wordmark and hero headings: the aurora sweep of the brand ramp. */
+  .text-aurora {
+    background-image: linear-gradient(
+      100deg,
+      var(--color-brand-500) 0%,
+      var(--color-accent-400) 55%,
+      var(--color-brand-400) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Glass panel used over the dark shell and the login artwork. */
+  .glass {
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(12px);
+  }
+
+  /* A raised surface on the light canvas: translucent, bevelled, and lit from
+     the top-left so it reads as a physical slab rather than a flat rectangle. */
+  .panel {
+    position: relative;
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.82) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      inset 0 -1px 0 rgba(148, 163, 184, 0.16),
+      0 1px 2px rgba(30, 27, 75, 0.04),
+      0 10px 22px -12px rgba(49, 46, 129, 0.18),
+      0 28px 56px -34px rgba(30, 27, 75, 0.36);
+    backdrop-filter: blur(14px) saturate(140%);
+  }
+
+  /* Hover lift for panels that carry a chart or a list. */
+  .panel-lift {
+    transition:
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .panel-lift:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      inset 0 -1px 0 rgba(148, 163, 184, 0.14),
+      0 2px 4px rgba(30, 27, 75, 0.05),
+      0 18px 34px -14px rgba(79, 70, 229, 0.28),
+      0 44px 80px -40px rgba(30, 27, 75, 0.5);
+  }
+
+  /* A hairline of brand colour along the top edge of a panel. */
+  .panel-edge::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 2px;
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-brand-400) 22%,
+      var(--color-accent-300) 52%,
+      transparent
+    );
+    opacity: 0.9;
+  }
+
+  /* Soft coloured orbs behind dark surfaces. */
+  .orb {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(58px);
+    pointer-events: none;
+  }
+
+  /* 3D press: the control sits on a lit top face and sinks on activation. */
+  .press-3d {
+    transition:
+      transform 0.16s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.16s ease,
+      filter 0.16s ease;
+  }
+  .press-3d:active:not(:disabled) {
+    transform: translateY(2px) scale(0.985);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .panel-lift:hover {
+    transform: none;
+  }
+}

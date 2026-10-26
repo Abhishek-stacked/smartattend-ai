@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Secrets & local config
+.env
+.env.*
+!.env.example
+
+# Biometric / private data — never commit
+ai_service/models/*.onnx
+ai_service/liveness/upstream/*.pth
+ai_service/evaluation/data/
+ai_service/evaluation/results/
+**/participant_images/
+*.npy
+
+# Tooling / OS
+.tools/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.log

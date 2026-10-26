@@ -1,0 +1,70 @@
+name: smartattend
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-smartattend}
+      POSTGRES_USER: ${POSTGRES_USER:-smartattend}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      APP_ENV: production
+      APP_TIMEZONE: ${APP_TIMEZONE:-UTC}
+      # Used in password-reset links; must be the URL users actually open.
+      FRONTEND_BASE_URL: ${PUBLIC_URL:-http://localhost:8080}
+      # nginx serves the SPA and the API from one origin, so no cross-origin access is allowed.
+      CORS_ORIGINS: ""
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-smartattend}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-smartattend}
+      SESSION_TTL_MINUTES: ${SESSION_TTL_MINUTES:-480}
+      SESSION_IDLE_MINUTES: ${SESSION_IDLE_MINUTES:-60}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      BIOMETRIC_ENCRYPTION_KEYS: ${BIOMETRIC_ENCRYPTION_KEYS:?Set BIOMETRIC_ENCRYPTION_KEYS in .env}
+      MODEL_DIR: /app/ai_service/models
+      MAX_UPLOAD_BYTES: ${MAX_UPLOAD_BYTES:-2097152}
+    volumes:
+      # Model weights are downloaded on the host and never baked into the image.
+      - ./ai_service/models:/app/ai_service/models:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import json, sys, urllib.request; body = json.load(urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=4)); sys.exit(0 if body['status'] == 'ok' else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  pgdata:

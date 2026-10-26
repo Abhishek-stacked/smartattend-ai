@@ -1,0 +1,19 @@
+# Keep the repository byte-identical for every platform.
+* text=auto eol=lf
+
+# Shell entrypoints must stay LF: CRLF breaks them inside the Linux container.
+*.sh text eol=lf
+
+# Windows scripts and batch files prefer CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Model weights, checkpoints and images are binary.
+*.onnx binary
+*.pth binary
+*.npy binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.svg text

@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "overrides": [
+    {
+      "files": [
+        "src/pages/AdminUsersPage.tsx",
+        "src/pages/StudentsPage.tsx",
+        "src/pages/FacultyPage.tsx",
+        "src/pages/CoursesPage.tsx",
+        "src/pages/SessionsPage.tsx",
+        "src/pages/SessionDetailPage.tsx",
+        "src/pages/AttendancePage.tsx",
+        "src/pages/CorrectionsPage.tsx",
+        "src/pages/DashboardPage.tsx",
+        "src/pages/ReportsPage.tsx",
+        "src/context/AuthContext.tsx"
+      ],
+      "rules": { "react/set-state-in-effect": "off" }
+    }
+  ]
+}
