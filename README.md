@@ -1,5 +1,7 @@
 # SmartAttend AI
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-indigo.svg)](LICENSE)
+
 An intelligent facial-recognition attendance management system with consent-based enrollment, liveness
 verification (experimental), exception review, and web-based analytics.
 
@@ -131,3 +133,13 @@ troubleshooting, see [docs/deployment.md](docs/deployment.md).
 | 9 | SRS, diagrams, evaluation harness, report material, viva preparation | Complete |
 
 Placeholders in the UI are labelled as scheduled work and never display fabricated statistics.
+
+## License
+
+The project source code is released under the [MIT License](LICENSE) — see [LICENSE](LICENSE) for the full text.
+
+This licence covers **this repository's own code only**. It does not cover the third-party model weights,
+which are downloaded by `ai_service/scripts/fetch_models.py` and are never committed here; each carries its
+own licence (YuNet MIT, SFace Apache-2.0), recorded with provenance and SHA-256 checksums in
+[docs/ai-models.md](docs/ai-models.md). The vendored liveness detector under
+`ai_service/liveness/upstream/` keeps its original Apache-2.0 licence file.
