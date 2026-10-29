@@ -9,6 +9,17 @@ Built as a final-year engineering major project. The system is deliberately hone
 implemented — see [docs/ai-models.md](docs/ai-models.md) for model provenance and limitations, and
 [docs/evaluation.md](docs/evaluation.md) for evaluation status (no accuracy metrics are claimed yet).
 
+## Live demo
+
+**<https://smartattend-ai-sblb.onrender.com>** — sign in with `abhishek.mishra@faculty.edu` /
+`SmartAttend2026` (faculty scope over seeded demo data; no real student records).
+
+The demo is a single container on a Render free instance with PostgreSQL on Neon: Caddy serves the built
+SPA and proxies `/api` to uvicorn. Free instances sleep after 15 minutes without traffic, so the first
+visit after a quiet period spends about a minute waking up. Deployment steps:
+[deploy/web/README.md](deploy/web/README.md) and
+[docs/deployment.md](docs/deployment.md#hosted-demo-render--neon).
+
 ## Documentation
 
 | Document | Contents |
@@ -36,6 +47,9 @@ smartattend-ai/
 ├── docs/           Architecture, deployment, database, API, model and UI documentation
 ├── backend/Dockerfile        API image (Alembic on start, non-root user, healthcheck)
 ├── frontend/Dockerfile       SPA build + nginx (security headers, /api reverse proxy)
+├── Dockerfile                Single-image build used by the hosted demo (Caddy + uvicorn)
+├── deploy/web/               Caddyfile and supervisord config for that image
+├── render.yaml               Render blueprint for the live demo
 └── docker-compose.yml        PostgreSQL + API + web
 ```
 

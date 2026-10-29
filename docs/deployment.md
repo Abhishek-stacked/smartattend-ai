@@ -54,8 +54,9 @@ docker compose ps          # wait for api and web to report healthy
 The backend entrypoint runs `alembic upgrade head` before starting uvicorn, so schema migrations are
 applied on every start. The frontend is built once in a Node stage and served by nginx.
 
-Open <http://localhost:8080>. API documentation is at <http://localhost:8080/api/docs> (FastAPI's own
-page; it is public by design and exposes no secrets).
+Open <http://localhost:8080>. FastAPI's own `/api/docs` page is available in development and test
+environments only: the production build hides it, because Swagger UI loads its assets from a CDN that the
+Content-Security-Policy forbids.
 
 ## 4. Create the first administrator
 
@@ -80,6 +81,46 @@ docker compose logs -f api
 
 `/api/health` reports database connectivity and whether each model file is present. A missing liveness
 model yields `not_enabled` behaviour, not fabricated results.
+
+## Hosted demo (Render + Neon)
+
+The public demo does not use Compose. It builds the root `Dockerfile`: one image in which Caddy serves the
+built SPA and reverse-proxies `/api` to uvicorn on `127.0.0.1:8000`, with supervisord (`deploy/web`)
+keeping both processes alive. Caddy listens on the `PORT` the host injects, so the same image fits any
+single-port container platform.
+
+The database is a Neon Postgres branch. Point `DATABASE_URL` at the **direct** (unpooled) endpoint: the
+pooled endpoint runs PgBouncer in transaction mode, which does not carry session state across a migration
+and trips over the prepared statements psycopg 3 uses. URLs without a driver (`postgres://`,
+`postgresql://`) are coerced to `postgresql+psycopg://` on load, because only psycopg 3 is installed.
+
+1. **Fill the database** — on an empty Neon branch, restore a dump of a working instance, then let Alembic
+   confirm the schema:
+
+   ```bash
+   pg_dump -Fc "$LOCAL_DATABASE_URL" -f demo.dump
+   pg_restore --no-owner --no-privileges --no-comments --dbname "$NEON_DIRECT_URL" demo.dump
+   DATABASE_URL="$NEON_DIRECT_URL" alembic upgrade head
+   ```
+
+2. **Create the service** — `render.yaml` declares a free Docker web service with its health check on
+   `/api/health`. The blueprint asks for the four values it does not keep in the repository:
+   `DATABASE_URL`, `BIOMETRIC_ENCRYPTION_KEYS` (must be the key that encrypted the restored templates),
+   and `FRONTEND_BASE_URL` / `CORS_ORIGINS` (both the service's `https://…onrender.com` origin, which
+   Render reveals only after the service exists).
+
+3. **Verify** — the same health checks as Compose, plus a login:
+
+   ```bash
+   curl -fsS https://<service>.onrender.com/api/health
+   curl -fsS -c jar -X POST https://<service>.onrender.com/api/auth/login \
+     -H 'Content-Type: application/json' \
+     -d '{"email":"you@example.edu","password":"…"}'
+   ```
+
+Free instances get 0.1 CPU and 512 MB and sleep after 15 minutes without traffic, so the first request
+after a quiet period takes roughly a minute. Bandwidth is metered per month; exceeding the free allowance
+without a payment method suspends every free service on the account.
 
 ## Operations
 
