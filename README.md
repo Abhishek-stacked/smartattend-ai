@@ -36,6 +36,7 @@ visit after a quiet period spends about a minute waking up. Deployment steps:
 | [UI wireframes](docs/ui-wireframes.md) | Screen flows and states |
 | [Report material](docs/report-material.md) | Report outline, drafting guidance, evidence table |
 | [Viva preparation](docs/viva-prep.md) | Demo runbook, Q&A, limitation answers |
+| [Complete guide (PDF)](docs/SmartAttend-AI-Complete-Guide.pdf) | 116-page walkthrough from first principles to the hosted deployment, including the failures along the way |
 
 ## Repository layout
 
