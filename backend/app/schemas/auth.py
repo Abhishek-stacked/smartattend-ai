@@ -3,6 +3,7 @@ from typing import Literal
 
 from pydantic import BaseModel, EmailStr, Field
 
+from app.core.config import get_settings
 from app.models import User
 
 RoleName = Literal["admin", "faculty", "student"]
@@ -21,9 +22,11 @@ class MeOut(BaseModel):
     student_id: int | None = None
     faculty_id: int | None = None
     last_login_at: datetime | None = None
+    can_create_admins: bool = False
 
     @classmethod
     def from_user(cls, user: User) -> "MeOut":
+        primary = get_settings().primary_admin_email.strip().lower()
         return cls(
             id=user.id,
             email=user.email,
@@ -32,6 +35,7 @@ class MeOut(BaseModel):
             student_id=user.student.id if user.student else None,
             faculty_id=user.faculty.id if user.faculty else None,
             last_login_at=user.last_login_at,
+            can_create_admins=user.role_name == "admin" and user.email.lower() == primary,
         )
 
 

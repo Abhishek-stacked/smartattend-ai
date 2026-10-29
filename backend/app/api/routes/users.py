@@ -3,8 +3,9 @@ from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
 
 from app.api.deps import PageParams, page_params, require_roles
+from app.core.config import get_settings
 from app.core.database import get_db
-from app.core.errors import not_found
+from app.core.errors import forbidden, not_found
 from app.models import Role, User
 from app.models.base import utcnow
 from app.models.user import ROLE_ADMIN
@@ -41,6 +42,8 @@ def list_users(
 @router.post("", response_model=UserCreatedOut, status_code=status.HTTP_201_CREATED)
 def create_admin(body: AdminCreateIn, request: Request, actor: User = Depends(admin_only),
                  db: Session = Depends(get_db)):
+    if actor.email.lower() != get_settings().primary_admin_email.strip().lower():
+        raise forbidden("Only the primary administrator can add administrator accounts")
     user = user_service.create_account(db, email=body.email, full_name=body.full_name, role=body.role,
                                        actor=actor, request=request)
     db.commit()

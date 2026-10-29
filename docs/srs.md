@@ -147,7 +147,7 @@ Priority: **M** = mandatory for the demonstrated release, **S** = should, **C** 
 | ID | Pri | Requirement | Acceptance / evidence |
 |---|---|---|---|
 | USR-01 | M | Administrators can list, search, filter and page through user accounts (page size ≤ 100). | `GET /users`; bounds tests |
-| USR-02 | M | Administrators can create additional administrator accounts without choosing a password; a one-time reset link is returned. | Admin console tests |
+| USR-02 | M | Only the primary administrator (PRIMARY_ADMIN_EMAIL, default abhishek.mishra@admin.edu) can create additional administrator accounts; no password is chosen, a one-time reset link is returned. | Admin console tests |
 | USR-03 | M | Accounts can be deactivated/reactivated; deactivation revokes active sessions immediately and keeps history. | Admin console tests, audit |
 | USR-04 | M | Locked accounts can be unlocked and a reset link issued from the console. | Admin console tests |
 | USR-05 | M | Privileged account changes are audited with actor, action, target and before/after state (no secrets). | audit tests |

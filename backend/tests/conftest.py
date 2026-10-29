@@ -3,6 +3,7 @@ import uuid
 
 os.environ["APP_ENV"] = "test"
 os.environ["COOKIE_SECURE"] = "false"
+os.environ["PRIMARY_ADMIN_EMAIL"] = "admin@example.edu"
 
 import pytest  # noqa: E402
 from alembic import command  # noqa: E402
@@ -89,7 +90,7 @@ def csrf_headers(client: TestClient) -> dict[str, str]:
 
 @pytest.fixture
 def admin_user(db):
-    return make_user(db, "admin")
+    return make_user(db, "admin", email="admin@example.edu")
 
 
 @pytest.fixture

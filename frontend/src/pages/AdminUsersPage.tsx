@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { Check, Copy, KeyRound, LockKeyhole, Search, UserPlus, Users } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 import { api, ApiError, query } from "../lib/api";
 import { formatDateTime, roleLabel, cx } from "../lib/format";
 import type { AdminUser, Page, ResetLink, Role } from "../lib/types";
@@ -29,6 +30,7 @@ function CopyButton({ value }: { value: string }) {
 }
 
 export function AdminUsersPage() {
+  const { user } = useAuth();
   const [search, setSearch] = useState("");
   const q = useDebounced(search, 300);
   const [role, setRole] = useState<"" | Role>("");
@@ -181,9 +183,11 @@ export function AdminUsersPage() {
         title="User accounts"
         description="All sign-in accounts. Set a password directly or issue a one-time reset link."
         actions={
-          <Button onClick={() => setCreateOpen(true)}>
-            <UserPlus aria-hidden className="size-4" /> Add administrator
-          </Button>
+          user?.can_create_admins ? (
+            <Button onClick={() => setCreateOpen(true)}>
+              <UserPlus aria-hidden className="size-4" /> Add administrator
+            </Button>
+          ) : undefined
         }
       />
 

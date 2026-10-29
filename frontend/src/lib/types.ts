@@ -8,6 +8,7 @@ export interface Me {
   student_id: number | null;
   faculty_id: number | null;
   last_login_at: string | null;
+  can_create_admins: boolean;
 }
 
 export interface Page<T> {

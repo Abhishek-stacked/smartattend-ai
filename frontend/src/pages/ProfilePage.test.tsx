@@ -17,6 +17,7 @@ const me: Me = {
   student_id: null,
   faculty_id: null,
   last_login_at: "2026-10-20T09:00:00Z",
+  can_create_admins: true,
 };
 
 const studentMe: Me = {
@@ -27,6 +28,7 @@ const studentMe: Me = {
   student_id: 7,
   faculty_id: null,
   last_login_at: "2026-10-20T09:00:00Z",
+  can_create_admins: false,
 };
 
 function stubFetch(profile: Me = me) {

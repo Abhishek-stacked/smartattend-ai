@@ -120,6 +120,21 @@ def test_deactivated_user_sessions_are_revoked(app_instance, admin_client, db):
     other.close()
 
 
+def test_only_the_primary_admin_can_create_administrators(client, admin_user, db):
+    assert login(client, admin_user.email).status_code == 200
+    first = client.post("/api/users", json={"email": "delegate.admin@example.edu", "full_name": "Delegate Admin"},
+                        headers=csrf_headers(client))
+    assert first.status_code == 201, first.text
+
+    secondary = make_user(db, "admin", email="secondary.admin@example.edu")
+    assert login(client, secondary.email).status_code == 200
+    denied = client.post("/api/users", json={"email": "third.admin@example.edu", "full_name": "Third Admin"},
+                         headers=csrf_headers(client))
+    assert denied.status_code == 403
+    assert denied.json()["error"]["code"] == "forbidden"
+    assert db.scalar(select(User).where(User.email == "third.admin@example.edu")) is None
+
+
 def test_admin_cannot_deactivate_self(admin_client, admin_user):
     r = admin_client.patch(f"/api/users/{admin_user.id}", json={"is_active": False}, headers=csrf_headers(admin_client))
     assert r.status_code == 400

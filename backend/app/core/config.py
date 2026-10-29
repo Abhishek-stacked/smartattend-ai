@@ -35,6 +35,7 @@ class Settings(BaseSettings):
 
     seed_admin_email: str | None = None
     seed_admin_password: str | None = None
+    primary_admin_email: str = "abhishek.mishra@admin.edu"
 
     @field_validator("app_timezone")
     @classmethod
