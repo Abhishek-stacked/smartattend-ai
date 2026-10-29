@@ -239,13 +239,20 @@ def faculty_account(db: Session, faculty: Faculty, actor: User, request=None) ->
 
 def faculty_detail(db: Session, faculty: Faculty) -> dict:
     rows = db.execute(
-        select(Course, func.count(CourseEnrollment.id))
+        select(
+            Course.id,
+            Course.code,
+            Course.name,
+            Course.term,
+            Course.status,
+            func.count(CourseEnrollment.id),
+        )
         .outerjoin(
             CourseEnrollment,
             (CourseEnrollment.course_id == Course.id) & (CourseEnrollment.status == "active"),
         )
         .where(Course.faculty_id == faculty.id)
-        .group_by(Course.id)
+        .group_by(Course.id, Course.code, Course.name, Course.term, Course.status)
         .order_by(Course.code)
     ).all()
     return {
@@ -261,9 +268,9 @@ def faculty_detail(db: Session, faculty: Faculty) -> dict:
         "updated_at": faculty.updated_at,
         "has_account": faculty.user_id is not None,
         "courses": [
-            {"course_id": c.id, "code": c.code, "name": c.name, "term": c.term, "status": c.status,
+            {"course_id": course_id, "code": code, "name": name, "term": term, "status": course_status,
              "student_count": count}
-            for c, count in rows
+            for course_id, code, name, term, course_status, count in rows
         ],
     }
 

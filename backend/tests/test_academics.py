@@ -162,3 +162,15 @@ def test_course_update_and_invalid_faculty(admin_client, db):
                                 headers=csrf_headers(admin_client))
     assert invalid.status_code == 422
     assert invalid.json()["error"]["code"] == "invalid_faculty"
+
+
+def test_faculty_detail_lists_courses_with_student_counts(admin_client, db):
+    faculty = create_faculty_record(db, employee_id="FAC-CS-777", email="nisha.rao@example.edu")
+    create_course(admin_client, faculty.id, code="CS310")
+
+    detail = admin_client.get(f"/api/faculty/{faculty.id}")
+    assert detail.status_code == 200, detail.text
+    body = detail.json()
+    assert body["employee_id"] == "FAC-CS-777"
+    assert body["has_account"] is False
+    assert [(c["code"], c["student_count"]) for c in body["courses"]] == [("CS310", 0)]
