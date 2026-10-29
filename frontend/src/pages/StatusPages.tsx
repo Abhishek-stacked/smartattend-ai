@@ -5,7 +5,7 @@ import { Button } from "../components/ui";
 export function UnauthorizedPage() {
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
-      <span className="grid size-12 place-items-center rounded-full bg-amber-50 text-amber-600">
+      <span className="grid size-12 place-items-center rounded-sm border-2 border-amber-500/40 bg-amber-500/10 text-amber-300">
         <ShieldAlert aria-hidden className="size-6" />
       </span>
       <h1 className="mt-4 text-xl font-semibold text-slate-900">You do not have access to this page</h1>

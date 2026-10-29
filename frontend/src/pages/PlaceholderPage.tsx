@@ -8,7 +8,7 @@ export function PlaceholderPage({ title, description, items }: { title: string; 
       <PageHeader title={title} description={description} />
       <Card>
         <div className="flex items-start gap-4">
-          <span className="grid size-11 shrink-0 place-items-center rounded-full bg-amber-50 text-amber-600">
+          <span className="grid size-11 shrink-0 place-items-center rounded-sm border-2 border-amber-500/40 bg-amber-500/10 text-amber-300">
             <Construction aria-hidden className="size-5" />
           </span>
           <div>

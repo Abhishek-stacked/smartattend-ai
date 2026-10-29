@@ -7,7 +7,7 @@ import { formatDateTime } from "../lib/format";
 import { attendanceRate, sessionLabel, sessionTone } from "../lib/attendance";
 import type { AttendanceSession, ClientSettings, Course, Page, SessionStatus } from "../lib/types";
 import { useDebounced } from "../hooks/useDebounced";
-import { Alert, Badge, Button, Card, EmptyState, Field, Modal, PageHeader, Spinner } from "../components/ui";
+import { Alert, Badge, Button, Card, EmptyState, Field, Modal, PageHeader, Select, Spinner } from "../components/ui";
 
 const PAGE_SIZE = 12;
 
@@ -309,25 +309,20 @@ export function SessionsPage() {
       >
         <form id="session-form" onSubmit={createSession} className="space-y-4" noValidate>
           {formError && <Alert tone="error">{formError}</Alert>}
-          <div>
-            <label htmlFor="session-course" className="block text-sm font-medium text-slate-700">
-              Course
-            </label>
-            <select
-              id="session-course"
-              value={form.course_id}
-              onChange={(e) => setForm({ ...form, course_id: e.target.value })}
-              required
-              className="mt-1.5 block h-10 w-full rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm focus:border-brand-500"
-            >
-              <option value="">Select a course</option>
-              {courses.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.code} · {c.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <Select
+            label="Course"
+            id="session-course"
+            value={form.course_id}
+            onChange={(e) => setForm({ ...form, course_id: e.target.value })}
+            required
+          >
+            <option value="">Select a course</option>
+            {courses.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.code} · {c.name}
+              </option>
+            ))}
+          </Select>
           <Field
             label="Title"
             value={form.title}

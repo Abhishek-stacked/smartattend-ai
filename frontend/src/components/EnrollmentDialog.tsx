@@ -317,7 +317,7 @@ export function EnrollmentDialog({
             </p>
           )}
 
-          <div className="relative overflow-hidden rounded-lg bg-slate-900">
+          <div className="relative overflow-hidden border-2 border-slate-300 bg-black">
             <video
               ref={camera.videoRef}
               muted
@@ -326,9 +326,9 @@ export function EnrollmentDialog({
               aria-label="Enrolment camera preview"
             />
             {!camera.active && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-slate-300">
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-slate-400">
                 <ScanFace aria-hidden className="size-8" />
-                <p className="text-sm">Camera is off</p>
+                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-400">Camera is off</p>
                 <Button variant="secondary" onClick={camera.start} loading={camera.starting}>
                   <Camera aria-hidden className="size-4" /> Turn on camera
                 </Button>
@@ -364,12 +364,12 @@ export function EnrollmentDialog({
           </div>
 
           {status && status.template_count > 0 && (
-            <label className="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+            <label className="flex items-start gap-3 rounded-sm border-2 border-amber-500/50 bg-amber-500/10 p-3 text-sm text-amber-100">
               <input
                 type="checkbox"
                 checked={replace}
                 onChange={(e) => setReplace(e.target.checked)}
-                className="mt-0.5 size-4 rounded border-amber-300 text-brand-600 focus:ring-brand-500"
+                className="mt-0.5 size-4 rounded-sm border-amber-400 bg-slate-50 accent-brand-500"
               />
               <span>
                 {selfEnrolled ? "You already have" : "This student already has"} {status.template_count} templates

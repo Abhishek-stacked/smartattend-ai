@@ -13,6 +13,17 @@ export default defineConfig({
       },
     },
   },
+  // `vite preview` serves the production bundle; it needs the same API proxy so
+  // the build can be checked against a real backend without a deploy.
+  preview: {
+    port: 4173,
+    proxy: {
+      "/api": {
+        target: "http://127.0.0.1:8000",
+        changeOrigin: false,
+      },
+    },
+  },
   test: {
     environment: "jsdom",
     globals: true,

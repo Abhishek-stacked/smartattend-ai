@@ -143,7 +143,7 @@ export function MarkAttendancePage() {
                   <article
                     key={session.id}
                     className={cx(
-                      "relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-brand-900 to-slate-950 p-5 text-white shadow-float ring-1 ring-white/10",
+                      "relative overflow-hidden border-2 border-slate-300 bg-[#0b0b0d] p-5 text-chalk shadow-float",
                       open.length === 1 && "md:col-span-2",
                     )}
                   >
@@ -163,32 +163,32 @@ export function MarkAttendancePage() {
 
                     <div className="relative">
                       <div className="mb-2 flex flex-wrap items-center gap-2">
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/15 px-2.5 py-1 text-xs font-semibold text-emerald-300 ring-1 ring-emerald-300/30">
+                        <span className="inline-flex items-center gap-1.5 border border-emerald-500/60 bg-emerald-500/15 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-300">
                           <span className="relative flex size-1.5">
                             <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                             <span className="relative inline-flex size-1.5 rounded-full bg-emerald-400" />
                           </span>
                           Live now
                         </span>
-                        <span className="rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium text-white/80 ring-1 ring-white/15">
+                        <span className="border border-slate-300 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-400">
                           {session.course_code}
                         </span>
                       </div>
-                      <h3 className="text-lg font-semibold tracking-tight text-white">{session.title}</h3>
-                      <p className="mt-1 text-sm text-white/60">
+                      <h3 className="text-lg font-semibold uppercase tracking-tight text-chalk">{session.title}</h3>
+                      <p className="mt-1 text-sm text-slate-400">
                         {session.course_name} · starts {formatDateTime(session.scheduled_start)}
                       </p>
 
-                      <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-4">
-                        <span className="flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2 text-sm text-white/80 ring-1 ring-white/15">
+                      <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t-2 border-slate-200 pt-4">
+                        <span className="flex items-center gap-2 border-2 border-slate-300 px-2.5 py-1.5 font-mono text-[10.5px] uppercase tracking-[0.12em] text-slate-400">
                           <Timer aria-hidden className="size-4 text-accent-300" />
                           Closes in
-                          <span className="font-semibold tabular-nums text-white">
+                          <span className="font-semibold tabular-nums text-brand-500">
                             {countdown(session.self_marking_closes_at, now)}
                           </span>
                         </span>
                         <Button
-                          className="press-3d h-11 rounded-xl bg-gradient-to-b from-emerald-300 via-emerald-400 to-teal-500 px-5 text-emerald-950 shadow-[0_12px_28px_-12px_rgba(16,185,129,0.95)] hover:from-emerald-200 hover:via-emerald-300 hover:to-teal-400"
+                          className="press-3d h-11 border-emerald-400 bg-emerald-400 text-[#04150d] shadow-[5px_5px_0_0_#000] hover:-translate-y-0.5 hover:bg-emerald-300 hover:shadow-[7px_7px_0_0_#000]"
                           loading={busyId === session.id}
                           onClick={() => void mark(session)}
                         >

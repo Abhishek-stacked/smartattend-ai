@@ -53,20 +53,20 @@ export function TrendChart({ series }: { series: TrendPoint[] }) {
       <GradientDefs ids={seriesDefs.map(({ status }) => `grad-${status}`)} />
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={series} margin={{ top: 4, right: 8, bottom: 0, left: -18 }}>
-          <CartesianGrid stroke="#dbe2f3" strokeDasharray="3 3" vertical={false} />
-          <XAxis dataKey="label" tick={{ fontSize: 11, fill: "#64748b" }} tickLine={false} axisLine={false} />
-          <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: "#64748b" }} tickLine={false} axisLine={false} />
+          <CartesianGrid stroke="#22222a" strokeDasharray="3 3" vertical={false} />
+          <XAxis dataKey="label" tick={{ fontSize: 11, fill: "#8b8f99" }} tickLine={false} axisLine={false} />
+          <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: "#8b8f99" }} tickLine={false} axisLine={false} />
           <Tooltip
-            cursor={{ stroke: "#a5acff", strokeWidth: 1, strokeDasharray: "4 4" }}
+            cursor={{ stroke: "#c6f24d", strokeWidth: 1, strokeDasharray: "4 4" }}
             contentStyle={{
-              borderRadius: 14,
-              border: "1px solid rgba(255,255,255,0.7)",
-              background: "rgba(255,255,255,0.92)",
-              backdropFilter: "blur(10px)",
-              boxShadow: "0 18px 40px -18px rgba(30,27,75,0.5)",
+              borderRadius: 2,
+              border: "2px solid #2c2c34",
+              background: "#131316",
+              boxShadow: "6px 6px 0 0 #000",
               fontSize: 12,
+              color: "#ced2da",
             }}
-            labelStyle={{ color: "#0f172a", fontWeight: 600 }}
+            labelStyle={{ color: "#f1f2f5", fontWeight: 600 }}
           />
           {seriesDefs.map(({ status, key, label }) => (
             <Area
@@ -79,7 +79,7 @@ export function TrendChart({ series }: { series: TrendPoint[] }) {
               strokeWidth={2}
               fill={`url(#grad-${status})`}
               fillOpacity={1}
-              activeDot={{ r: 4, strokeWidth: 2, stroke: "#fff" }}
+              activeDot={{ r: 4, strokeWidth: 2, stroke: "#08080a" }}
             />
           ))}
         </AreaChart>
@@ -117,13 +117,14 @@ export function StatusPie({ slices }: { slices: StatusSlice[] }) {
           </Pie>
           <Tooltip
             contentStyle={{
-              borderRadius: 14,
-              border: "1px solid rgba(255,255,255,0.7)",
-              background: "rgba(255,255,255,0.92)",
-              backdropFilter: "blur(10px)",
-              boxShadow: "0 18px 40px -18px rgba(30,27,75,0.5)",
+              borderRadius: 2,
+              border: "2px solid #2c2c34",
+              background: "#131316",
+              boxShadow: "6px 6px 0 0 #000",
               fontSize: 12,
+              color: "#ced2da",
             }}
+            labelStyle={{ color: "#f1f2f5", fontWeight: 600 }}
           />
         </PieChart>
       </ResponsiveContainer>

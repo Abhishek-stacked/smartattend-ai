@@ -1,24 +1,31 @@
 # UI Wireframes (low fidelity)
 
-Design system: aurora mesh background (indigo → cyan → violet glows over a pale blue-grey
-base), glass "panel" surfaces with inset top highlights and coloured outer shadows, gradient
-hairlines on card edges, brand indigo → cyan accent ramp, Inter/system font, 8-px spacing
-grid, WCAG AA contrast, lucide icons, focus rings on all interactive elements.
+Design system (shipped): ink and acid brutalism. A near-black page (`#0e0e11`), near-black
+panels (`#131316`), one saturated lime (`#c6f24d`), one steel grey (`#9aa3b0`), 2-px borders,
+corner radii between 1 and 6 px, and hard unblurred black plates (`8px 8px 0 0 #000`) where
+a soft shadow used to sit. Inter/system for reading text, a monospace voice for labels and
+micro-copy, 8-px spacing grid, WCAG AA contrast, lucide icons, focus rings on all interactive
+elements.
 
-Depth is expressed with four reusable utilities in `frontend/src/index.css`:
-`.panel` (frosted surface + layered shadow), `.panel-edge` (2-px gradient hairline on the top
-edge), `.panel-lift` (3-px lift + deeper shadow on hover), `.press-3d` (2-px press with scale
-on `:active`). `.orb` provides the blurred coloured glows used behind hero panels and the
-sidebar.
+The palette is Tailwind's slate ramp inverted inside the `@theme` block of
+`frontend/src/index.css`, so components keep writing `bg-white` / `text-slate-900` and get the
+dark values; `color-scheme: dark` makes native selects, scrollbars and date pickers follow.
+Depth is expressed with the same reusable utilities:
+`.panel` (2-px hairline + hard plate), `.panel-edge` (inset top highlight),
+`.panel-lift` (the object moves 3 px and the plate grows to 13 px on hover), `.press-3d` (the
+button travels into its own shadow on `:active`). Three genuinely three-dimensional objects
+sit on top of those: `.floor` (a perspective grid drifting to a horizon), `.cube` (a six-faced
+box on the login page) and `.slab-3d` (the login card, tilted 6° and squaring up on focus).
+Every animation is CSS and stops under `prefers-reduced-motion: reduce`.
 
 ## App shell (all authenticated pages)
 ```
 ┌──────────────┬──────────────────────────────────────────────────────────┐
 │ ◉ SmartAttend│  Breadcrumb › Page                         🔔  (JD) ▾   │
 │  (dark       ├──────────────────────────────────────────────────────────┤
-│   aurora     │  Page title                                [Primary CTA] │
+│  black slab  │  Page title                                [Primary CTA] │
 │   sidebar    │  One-line description                                    │
-│   + glows)   │  ┌ content ──────────────────────────────────────────┐   │
+│  + hard rim) │  ┌ content ──────────────────────────────────────────┐   │
 │ ▣ Dashboard  │  │                                                   │   │
 │ ☺ Students   │  └───────────────────────────────────────────────────┘   │
 │ ☺ Faculty    │                                                          │
@@ -35,7 +42,7 @@ sidebar.
 ```
 Mobile: sidebar becomes a slide-over drawer opened from a hamburger in the top bar.
 Navigation items are filtered by role (admin / faculty / student).
-The active item is a gradient pill with a translucent white ring; inactive items dim on hover.
+The active item is inverted to a lime block with black text; inactive items brighten on hover.
 
 ## Admin dashboard
 ```
@@ -46,8 +53,8 @@ Filters: date range ▾  course ▾
 └──────────────────────────────────────────────┘ └─────────────────────────────┘
 ┌ Course-wise attendance % (bar) ──────────────┐ ┌ Recent activity list ───────┐
 ```
-Stat tiles are gradient panels with a blurred accent orb in the corner, a gradient-clipped
-number and a hover lift.
+Stat tiles are slabs with a hard black plate, a monospace eyebrow and an oversized number;
+they lift out of their plate on hover.
 
 ## Live attendance
 ```
@@ -114,11 +121,11 @@ Hello, Asha        Overall 86.4 %  Present 38  Late 4  Absent 7
 ## Student mark-attendance page (live self-marking)
 ```
 ┌ Today's sessions ────────────────────────────────────────────────────────┐
-│  ┌ OPEN NOW ─ dark aurora hero, spans 2 columns ──────────────────────┐  │
+│  ┌ OPEN NOW ─ dark brutal hero, spans 2 columns ──────────────────────┐  │
 │  │ ● Live now   AIML01 · Gen AI                                       │  │
 │  │ Lecture 6 – Self-marking demo                                     │  │
 │  │ Closes in 24:10        [ ● Mark me present ]                       │  │
-│  │ (blurred brand + accent orbs behind the content)                  │  │
+│  │ (acid rule + hard black plate behind content)                     │  │
 │  └────────────────────────────────────────────────────────────────────┘  │
 │  ┌ Later today ──────────────────────────────────────────────────────┐  │
 │  │ CS301 · Lecture 4    14:00 – 15:00    Self-marking opens then     │  │
@@ -138,11 +145,14 @@ press does nothing and never overwrites an existing record.
 │  head-line     │   Sign in                          │
 │  feature cards │   [email            ] [eye]        │
 │  (icon chips)  │   [password         ] [eye]        │
-│  3-D scan      │   [   Sign in   ]                  │
-│  motif (rings, │   error alert                      │
-│  glow, scan    │                                     │
-│  line)         │                                     │
+│  cube + floor  │   [   Sign in   ]                  │
+│  grid, ticker  │   error alert                      │
+│  of index      │                                     │
+│  terms         │                                     │
 └───────────────┴─────────────────────────────────────┘
 ```
-The left panel is a dark aurora hero with concentric scan rings, a glowing orb and a scan
-line; it is hidden below the `xl` breakpoint so the mobile layout is a single column.
+The left panel is a black specification sheet: a drifting perspective floor, a faint mask
+grid, a numbered headline with one lime block, three rule-separated feature rows, a marquee
+of index terms, and a 3-D cube whose faces carry the system's verbs. The login card beside it
+is tilted in space and squares up when a field takes focus; two offset plates sit behind it.
+The panel is hidden below the `xl` breakpoint so the mobile layout is a single column.

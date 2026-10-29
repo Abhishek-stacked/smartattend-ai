@@ -12,13 +12,16 @@ export function Select({ label, hint, className, id, children, ...rest }: Select
   const selectId = id ?? autoId;
   return (
     <div className={cx("space-y-1.5", className)}>
-      <label htmlFor={selectId} className="block text-sm font-medium text-slate-700">
+      <label
+        htmlFor={selectId}
+        className="block font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-slate-500"
+      >
         {label}
       </label>
       <select
         id={selectId}
         aria-describedby={hint ? `${selectId}-hint` : undefined}
-        className="block h-10 w-full rounded-xl border border-slate-300 bg-white px-2 text-sm text-slate-900 shadow-sm transition hover:border-slate-400 focus:border-brand-500 focus:shadow-glow"
+        className="block h-11 w-full rounded-sm border-2 border-slate-300 bg-slate-50 px-2 text-sm text-slate-900 transition-all duration-150 hover:border-slate-400 focus:border-brand-500 focus:shadow-[4px_4px_0_0_#c6f24d] focus:outline-none"
         {...rest}
       >
         {children}

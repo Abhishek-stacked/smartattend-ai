@@ -379,7 +379,7 @@ export function LivePage() {
               )
             }
           >
-            <div className="relative overflow-hidden rounded-lg bg-slate-900">
+            <div className="relative overflow-hidden rounded-lg border-2 border-slate-300 bg-black">
               <video
                 ref={camera.videoRef}
                 muted
@@ -402,7 +402,7 @@ export function LivePage() {
                           height: `${(height / frame.height) * 100}%`,
                         }}
                       >
-                        <span className="absolute -top-6 left-0 max-w-full truncate rounded bg-slate-900/80 px-1.5 py-0.5 text-[11px] font-medium text-white">
+                        <span className="absolute -top-6 left-0 max-w-full truncate border border-brand-500 bg-black/85 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-chalk">
                           {result.student?.full_name ?? OUTCOME_LABELS[result.outcome]}
                         </span>
                       </div>
@@ -411,9 +411,9 @@ export function LivePage() {
                 </div>
               )}
               {!camera.active && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-slate-300">
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-slate-400">
                   <ScanFace aria-hidden className="size-8" />
-                  <p className="text-sm">{active ? "Camera is off" : "Select an active session to use the camera"}</p>
+                  <p className="text-sm text-chalk">{active ? "Camera is off" : "Select an active session to use the camera"}</p>
                   <Button variant="secondary" onClick={camera.start} loading={camera.starting} disabled={!active}>
                     <Camera aria-hidden className="size-4" /> Turn on camera
                   </Button>

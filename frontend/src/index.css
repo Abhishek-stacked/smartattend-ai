@@ -3,151 +3,470 @@
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
     sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, "Courier New", monospace;
 
-  /* Aurora indigo: the primary surface colour of the product. */
-  --color-brand-50: #eef1ff;
-  --color-brand-100: #e1e5ff;
-  --color-brand-200: #c7cdff;
-  --color-brand-300: #a5acff;
-  --color-brand-400: #8489fb;
-  --color-brand-500: #6c63f4;
-  --color-brand-600: #5a48e6;
-  --color-brand-700: #4c37c9;
-  --color-brand-800: #3f30a4;
-  --color-brand-900: #352c83;
+  /* ---------------------------------------------------------------------
+     INK / SILVER. The theme is dark by construction: the slate ramp is
+     inverted, so every `text-slate-900` in a page becomes near-white and
+     every `bg-slate-50` becomes a near-black surface. One ramp, whole app.
+     --------------------------------------------------------------------- */
 
-  /* Aqua accent: second stop of every gradient and the live-status highlight. */
-  --color-accent-50: #ecfeff;
-  --color-accent-100: #cffafe;
-  --color-accent-200: #a5f3fc;
-  --color-accent-300: #67e8f9;
-  --color-accent-400: #22d3ee;
-  --color-accent-500: #06b6d4;
-  --color-accent-600: #0891b2;
-  --color-accent-700: #0e7490;
-  --color-accent-800: #155e75;
-  --color-accent-900: #164e63;
+  --color-ink: #08080a;
+  --color-panel: #131316;
+  --color-edge: #2c2c34;
+  --color-chalk: #f4f5f7;
 
-  /* Depth. Surfaces sit above the page instead of sitting flat on it. */
-  --shadow-surface: 0 1px 1px rgba(15, 23, 42, 0.04), 0 4px 10px -4px rgba(15, 23, 42, 0.08),
-    0 18px 40px -26px rgba(15, 23, 42, 0.3);
-  --shadow-lift: 0 2px 4px rgba(15, 23, 42, 0.05), 0 24px 44px -22px rgba(79, 70, 229, 0.45);
-  --shadow-float: 0 30px 70px -30px rgba(30, 27, 75, 0.55);
-  --shadow-glow: 0 0 0 1px rgba(108, 99, 244, 0.16), 0 14px 34px -14px rgba(90, 72, 230, 0.5);
-  --shadow-control: inset 0 1px 0 rgba(255, 255, 255, 0.32), 0 1px 2px rgba(15, 23, 42, 0.1),
-    0 8px 18px -12px rgba(79, 70, 229, 0.85);
+  --color-slate-50: #0e0e11;
+  --color-slate-100: #16161a;
+  --color-slate-200: #1f1f25;
+  --color-slate-300: #2c2c34;
+  --color-slate-400: #7d818b;
+  --color-slate-500: #9aa0ab;
+  --color-slate-600: #b8bdc7;
+  --color-slate-700: #ced2da;
+  --color-slate-800: #e0e3e8;
+  --color-slate-900: #f1f2f5;
+  --color-slate-950: #ffffff;
+
+  /* Acid lime: the one saturated colour in the system. Used as a block, never
+     as a gradient — a flat fill with black type on top. */
+  --color-brand-50: #171d0a;
+  --color-brand-100: #1e260d;
+  --color-brand-200: #35410f;
+  --color-brand-300: #86a52e;
+  --color-brand-400: #a8cf3a;
+  --color-brand-500: #c6f24d;
+  --color-brand-600: #d3fa6b;
+  --color-brand-700: #e2ff9b;
+  --color-brand-800: #edffc6;
+  --color-brand-900: #f5ffe4;
+
+  /* Steel: the second accent, for anything that must read as metal. */
+  --color-accent-50: #f2f4f7;
+  --color-accent-100: #e6e9ee;
+  --color-accent-200: #d3d8e0;
+  --color-accent-300: #b9c0cb;
+  --color-accent-400: #9aa3b0;
+  --color-accent-500: #7b8494;
+  --color-accent-600: #626b7a;
+  --color-accent-700: #4d5563;
+  --color-accent-800: #3a414c;
+  --color-accent-900: #2b3038;
+
+  /* White is redefined as the panel colour, because `text-white` in this
+     codebase means "on a coloured fill" (a lime button), which wants black
+     type here. Genuine white is `--color-chalk` / `text-chalk`. */
+  --color-white: #131316;
+
+  /* Depth: no blur. Every surface throws a solid black plate. */
+  --shadow-surface: 8px 8px 0 0 #000;
+  --shadow-lift: 12px 12px 0 0 #000;
+  --shadow-float: 16px 16px 0 0 #000;
+  --shadow-glow: 5px 5px 0 0 #000, 0 0 0 2px var(--color-brand-500);
+  --shadow-control: 5px 5px 0 0 #000;
+
+  /* Corners: nearly square. `rounded-xl` on an input is 2px here. */
+  --radius-xs: 1px;
+  --radius-sm: 2px;
+  --radius-md: 2px;
+  --radius-lg: 2px;
+  --radius-xl: 3px;
+  --radius-2xl: 4px;
+  --radius-3xl: 6px;
 }
 
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
+    color-scheme: dark;
+    scrollbar-color: #3a3a44 #08080a;
   }
   body {
     @apply text-slate-900 antialiased;
-    background-color: #eef1fb;
+    background-color: var(--color-ink);
     background-image:
-      radial-gradient(48rem 34rem at 4% -8%, rgba(108, 99, 244, 0.32), transparent 60%),
-      radial-gradient(40rem 30rem at 92% -6%, rgba(34, 211, 238, 0.28), transparent 58%),
-      radial-gradient(44rem 32rem at 78% 24%, rgba(192, 132, 252, 0.2), transparent 60%),
-      radial-gradient(56rem 38rem at 34% 108%, rgba(99, 102, 241, 0.22), transparent 62%),
-      linear-gradient(180deg, #f6f7ff 0%, #eef1fb 38%, #f3f6ff 100%);
+      radial-gradient(64rem 42rem at 12% -12%, rgba(198, 242, 77, 0.09), transparent 62%),
+      radial-gradient(52rem 38rem at 102% 4%, rgba(185, 192, 203, 0.1), transparent 58%),
+      linear-gradient(180deg, #0a0a0c 0%, #08080a 48%, #0b0b0e 100%);
     background-attachment: fixed;
+  }
+  /* The drawing board: a hairline grid that drifts, masked away from the edges. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: -60px;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(130% 110% at 50% 0%, #000 15%, transparent 82%);
+    -webkit-mask-image: radial-gradient(130% 110% at 50% 0%, #000 15%, transparent 82%);
+    animation: grid-drift 22s linear infinite;
   }
   :focus-visible {
     outline: 2px solid var(--color-brand-500);
     outline-offset: 2px;
   }
   ::selection {
-    @apply bg-brand-100 text-brand-900;
+    background: var(--color-brand-500);
+    color: #08080a;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #08080a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #33333c;
+    border: 2px solid #08080a;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #4a4a56;
+  }
+  /* Chrome paints the native date/time picker glyph in near-black regardless of
+     color-scheme; invert it so it reads on the dark field. */
+  input[type="date"]::-webkit-calendar-picker-indicator,
+  input[type="time"]::-webkit-calendar-picker-indicator,
+  input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+  input[type="month"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(1.6);
+    opacity: 0.6;
+    cursor: pointer;
+  }
+  input[type="date"]::-webkit-calendar-picker-indicator:hover,
+  input[type="time"]::-webkit-calendar-picker-indicator:hover,
+  input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+  }
+  /* The drop-down list of a native <select> is drawn by the OS. */
+  select option {
+    background-color: var(--color-panel);
+    color: var(--color-slate-900);
   }
 }
 
 @layer components {
-  /* Wordmark and hero headings: the aurora sweep of the brand ramp. */
+  /* Small caps label used for every eyebrow, section tag and table header. */
+  .label-mono {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    line-height: 1.2;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #8b8f99;
+  }
+
+  /* Metal sheen for the wordmark. Not a rainbow — a brushed gradient. */
   .text-aurora {
-    background-image: linear-gradient(
-      100deg,
-      var(--color-brand-500) 0%,
-      var(--color-accent-400) 55%,
-      var(--color-brand-400) 100%
-    );
+    background-image: linear-gradient(100deg, #f4f5f7 0%, #b9c0cb 34%, #ffffff 52%, #8e96a3 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
-  /* Glass panel used over the dark shell and the login artwork. */
-  .glass {
-    background-color: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    backdrop-filter: blur(12px);
+  .text-lime {
+    color: var(--color-brand-500);
   }
 
-  /* A raised surface on the light canvas: translucent, bevelled, and lit from
-     the top-left so it reads as a physical slab rather than a flat rectangle. */
+  /* Flat translucent slab used over the dark shell and the login artwork. */
+  .glass {
+    background-color: rgba(255, 255, 255, 0.035);
+    border: 2px solid var(--color-edge);
+    backdrop-filter: blur(6px);
+  }
+
+  /* The product surface: an opaque plate with a 2px edge and a solid shadow. */
   .panel {
     position: relative;
-    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.82) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.9),
-      inset 0 -1px 0 rgba(148, 163, 184, 0.16),
-      0 1px 2px rgba(30, 27, 75, 0.04),
-      0 10px 22px -12px rgba(49, 46, 129, 0.18),
-      0 28px 56px -34px rgba(30, 27, 75, 0.36);
-    backdrop-filter: blur(14px) saturate(140%);
-  }
-
-  /* Hover lift for panels that carry a chart or a list. */
-  .panel-lift {
+    background-color: var(--color-panel);
+    border: 2px solid var(--color-edge);
+    box-shadow: var(--shadow-surface);
     transition:
-      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .panel-lift:hover {
-    transform: translateY(-3px);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.9),
-      inset 0 -1px 0 rgba(148, 163, 184, 0.14),
-      0 2px 4px rgba(30, 27, 75, 0.05),
-      0 18px 34px -14px rgba(79, 70, 229, 0.28),
-      0 44px 80px -40px rgba(30, 27, 75, 0.5);
+      transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.2s ease;
   }
 
-  /* A hairline of brand colour along the top edge of a panel. */
+  .panel-lift:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 13px 13px 0 0 #000;
+    border-color: #3d3d49;
+  }
+
+  /* Lime rule along the top edge of a panel. */
   .panel-edge::before {
     content: "";
     position: absolute;
-    inset-inline: 0;
-    top: 0;
-    height: 2px;
-    background-image: linear-gradient(
-      90deg,
-      transparent,
-      var(--color-brand-400) 22%,
-      var(--color-accent-300) 52%,
-      transparent
-    );
-    opacity: 0.9;
+    left: -2px;
+    right: -2px;
+    top: -2px;
+    height: 3px;
+    background-image: linear-gradient(90deg, var(--color-brand-500), #6f7d3a 46%, transparent 88%);
   }
 
-  /* Soft coloured orbs behind dark surfaces. */
+  /* Soft colour field behind dark surfaces. */
   .orb {
     position: absolute;
     border-radius: 9999px;
-    filter: blur(58px);
+    filter: blur(60px);
+    opacity: 0.7;
     pointer-events: none;
   }
 
-  /* 3D press: the control sits on a lit top face and sinks on activation. */
+  /* 3D press: the control sinks into its own shadow. */
   .press-3d {
     transition:
       transform 0.16s cubic-bezier(0.22, 1, 0.36, 1),
       box-shadow 0.16s ease,
-      filter 0.16s ease;
+      background-color 0.16s ease,
+      border-color 0.16s ease;
   }
   .press-3d:active:not(:disabled) {
-    transform: translateY(2px) scale(0.985);
+    transform: translate(4px, 4px);
+    box-shadow: none;
+  }
+
+  /* Entrance animation. Set --d on the element to stagger it. */
+  .anim-rise {
+    animation: rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--d, 0ms);
+  }
+  .anim-fade {
+    animation: fade 0.4s ease both;
+    animation-delay: var(--d, 0ms);
+  }
+  .anim-pop {
+    animation: pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-delay: var(--d, 0ms);
+  }
+
+  /* A slow vertical scan across a panel. */
+  .scan::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 28%;
+    pointer-events: none;
+    background-image: linear-gradient(180deg, transparent, rgba(198, 242, 77, 0.07) 60%, transparent);
+    animation: scan 6.5s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  }
+
+  /* Perspective floor: the "3D room" behind the login artwork. */
+  .floor {
+    position: absolute;
+    inset: auto -20% -12% -20%;
+    height: 62%;
+    perspective: 420px;
+    pointer-events: none;
+    mask-image: linear-gradient(180deg, transparent, #000 35%, transparent 92%);
+    -webkit-mask-image: linear-gradient(180deg, transparent, #000 35%, transparent 92%);
+  }
+  .floor::before {
+    content: "";
+    position: absolute;
+    inset: -40% -40%;
+    transform: rotateX(72deg);
+    transform-origin: 50% 100%;
+    background-image:
+      linear-gradient(to right, rgba(198, 242, 77, 0.22) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(198, 242, 77, 0.22) 1px, transparent 1px);
+    background-size: 62px 62px;
+    animation: floor-run 7s linear infinite;
+  }
+
+  /* Wireframe cube: six labelled faces, one slow rotation. */
+  .scene {
+    perspective: 900px;
+  }
+  .cube {
+    position: relative;
+    width: 168px;
+    height: 168px;
+    transform-style: preserve-3d;
+    animation: spin-3d 20s linear infinite;
+  }
+  .cube-face {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    border: 2px solid #34343e;
+    background-color: rgba(19, 19, 22, 0.92);
+    /* Without this the three rear faces paint through and their labels read
+       backwards through the box. */
+    backface-visibility: hidden;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.22em;
+    color: var(--color-brand-500);
+  }
+  .cube-face:nth-child(1) {
+    transform: translateZ(84px);
+  }
+  .cube-face:nth-child(2) {
+    transform: rotateY(180deg) translateZ(84px);
+  }
+  .cube-face:nth-child(3) {
+    transform: rotateY(90deg) translateZ(84px);
+  }
+  .cube-face:nth-child(4) {
+    transform: rotateY(-90deg) translateZ(84px);
+  }
+  .cube-face:nth-child(5) {
+    transform: rotateX(90deg) translateZ(84px);
+  }
+  .cube-face:nth-child(6) {
+    transform: rotateX(-90deg) translateZ(84px);
+  }
+
+  /* Marquee strip. The track holds the text twice; the second copy fills the gap. */
+  .ticker {
+    overflow: hidden;
+    border-block: 2px solid var(--color-edge);
+  }
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    animation: ticker 26s linear infinite;
+  }
+  .ticker:hover .ticker-track {
+    animation-play-state: paused;
+  }
+
+  .live-dot {
+    animation: blink 1.8s ease-in-out infinite;
+  }
+
+  /* The login credentials slab: a thin plate of card, tilted in space until
+     you point at it, then it squares up. */
+  .slab-3d {
+    transform: perspective(1500px) rotateY(-6deg) rotateX(2deg);
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    transform-style: preserve-3d;
+  }
+  .slab-3d:hover,
+  .slab-3d:focus-within {
+    transform: perspective(1500px) rotateY(0deg) rotateX(0deg);
+  }
+  .slab-3d input,
+  .slab-3d button {
+    transform: translateZ(0);
+  }
+
+  /* A numbered rule in the left-hand spec list. */
+  .spec-row {
+    display: grid;
+    grid-template-columns: 2.25rem 1fr;
+    gap: 0.9rem;
+    align-items: start;
+    border-top: 2px solid #1f1f25;
+    padding: 0.9rem 0;
+    transition:
+      border-color 0.2s ease,
+      transform 0.2s ease;
+  }
+  .spec-row:hover {
+    border-color: #34343e;
+    transform: translateX(3px);
+  }
+}
+
+@keyframes grid-drift {
+  from {
+    background-position:
+      0 0,
+      0 0;
+  }
+  to {
+    background-position:
+      0 528px,
+      528px 0;
+  }
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes scan {
+  0% {
+    transform: translateY(-120%);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(420%);
+    opacity: 0;
+  }
+}
+@keyframes floor-run {
+  from {
+    background-position:
+      0 0,
+      0 0;
+  }
+  to {
+    background-position:
+      0 0,
+      0 620px;
+  }
+}
+@keyframes spin-3d {
+  from {
+    transform: rotateX(-16deg) rotateY(0deg);
+  }
+  to {
+    transform: rotateX(-16deg) rotateY(360deg);
+  }
+}
+@keyframes ticker {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.15;
   }
 }
 
@@ -156,10 +475,17 @@
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
   .panel-lift:hover {
     transform: none;
+  }
+  .cube,
+  .floor::before,
+  .ticker-track,
+  body::before {
+    animation: none !important;
   }
 }

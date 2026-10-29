@@ -15,9 +15,12 @@ export function Field({ label, error, hint, className, id, required, ...rest }: 
 
   return (
     <div className={cx("space-y-1.5", className)}>
-      <label htmlFor={inputId} className="block text-sm font-medium text-slate-700">
+      <label
+        htmlFor={inputId}
+        className="block font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-slate-500"
+      >
         {label}
-        {required && <span className="ml-0.5 text-rose-600">*</span>}
+        {required && <span className="ml-1 text-brand-500">*</span>}
       </label>
       <input
         id={inputId}
@@ -25,16 +28,16 @@ export function Field({ label, error, hint, className, id, required, ...rest }: 
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy}
         className={cx(
-          "block h-10 w-full rounded-xl border bg-white px-3 text-sm text-slate-900 shadow-sm transition",
-          "placeholder:text-slate-400 disabled:cursor-not-allowed disabled:bg-slate-50",
+          "block h-11 w-full rounded-sm border-2 bg-slate-50 px-3 text-sm text-slate-900 transition-all duration-150",
+          "placeholder:text-slate-400 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500",
           error
-            ? "border-rose-400 focus:border-rose-500 focus:shadow-glow"
-            : "border-slate-300 hover:border-slate-400 focus:border-brand-500 focus:shadow-glow",
+            ? "border-rose-500 focus:border-rose-400 focus:shadow-[4px_4px_0_0_#f43f5e]"
+            : "border-slate-300 hover:border-slate-400 focus:border-brand-500 focus:shadow-[4px_4px_0_0_#c6f24d] focus:outline-none",
         )}
         {...rest}
       />
       {error ? (
-        <p id={`${inputId}-error`} className="text-xs font-medium text-rose-600">
+        <p id={`${inputId}-error`} className="font-mono text-[10.5px] uppercase tracking-[0.1em] text-rose-400">
           {error}
         </p>
       ) : hint ? (
