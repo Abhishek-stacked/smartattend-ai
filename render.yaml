@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: smartattend-ai
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_TIMEZONE
+        value: Asia/Kolkata
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: MAX_UPLOAD_BYTES
+        value: "2097152"
+      # Postgres lives on Neon; the direct (non-pooler) endpoint is required because
+      # migrations and psycopg3 prepared statements do not survive PgBouncer.
+      - key: DATABASE_URL
+        sync: false
+      # Must stay identical to the key that encrypted the stored templates.
+      - key: BIOMETRIC_ENCRYPTION_KEYS
+        sync: false
+      - key: FRONTEND_BASE_URL
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false

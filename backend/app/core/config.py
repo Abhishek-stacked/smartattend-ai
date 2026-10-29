@@ -42,6 +42,15 @@ class Settings(BaseSettings):
         ZoneInfo(v)
         return v
 
+    @field_validator("database_url", "test_database_url")
+    @classmethod
+    def _psycopg_driver(cls, v: str | None) -> str | None:
+        # Hosted providers (Neon included) hand out driver-less postgresql:// URLs;
+        # SQLAlchemy would then look for psycopg2, which this project does not install.
+        if v and v.startswith(("postgresql://", "postgres://")):
+            return "postgresql+psycopg://" + v.split("://", 1)[1]
+        return v
+
     @model_validator(mode="after")
     def _isolate_test_database(self) -> "Settings":
         if self.app_env == "test":

@@ -27,3 +27,8 @@ ai_service/evaluation/data/
 ai_service/evaluation/results/
 **/participant_images/
 *.npy
+
+# The liveness model is converted from an Apache-2.0 checkpoint and is small enough to
+# ship inside the single-container image; the large recognition weights are fetched at
+# build time instead.
+!ai_service/models/minifasnet_v2_2.7_80x80.onnx

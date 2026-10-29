@@ -45,13 +45,17 @@ def create_app() -> FastAPI:
             "Terminate TLS and set COOKIE_SECURE=true."
         )
 
+    # Swagger UI pulls its assets from a CDN, which the production CSP forbids,
+    # so the interactive docs are a development-only surface.
+    docs_enabled = not settings.is_production
+
     app = FastAPI(
         title="SmartAttend AI API",
         version="1.0.0",
         description="Face-recognition attendance management. All endpoints are under /api.",
-        docs_url="/api/docs",
+        docs_url="/api/docs" if docs_enabled else None,
         redoc_url=None,
-        openapi_url="/api/openapi.json",
+        openapi_url="/api/openapi.json" if docs_enabled else None,
     )
     register_error_handlers(app)
 

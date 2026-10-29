@@ -30,6 +30,17 @@ def test_production_refuses_to_boot_without_template_keys():
     assert configured.is_production is True
 
 
+def test_driverless_postgres_urls_are_coerced_to_psycopg():
+    settings = Settings(app_env="development", database_url="postgresql://u:p@ep-x.neon.tech/db?sslmode=require")
+    assert settings.database_url == "postgresql+psycopg://u:p@ep-x.neon.tech/db?sslmode=require"
+
+    legacy = Settings(app_env="development", database_url="postgres://u:p@localhost/db")
+    assert legacy.database_url == "postgresql+psycopg://u:p@localhost/db"
+
+    explicit = Settings(app_env="development", database_url="postgresql+psycopg://u:p@localhost/db")
+    assert explicit.database_url == "postgresql+psycopg://u:p@localhost/db"
+
+
 def test_csrf_is_required_for_unsafe_methods(admin_client, admin_user):
     body = {"full_name": "Renamed Administrator"}
     url = f"/api/users/{admin_user.id}"

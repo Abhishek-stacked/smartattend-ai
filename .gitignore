@@ -33,3 +33,8 @@ ai_service/evaluation/results/
 .DS_Store
 Thumbs.db
 *.log
+.neon
+
+# The converted liveness model is small and must ship with the source tree, because the
+# image build only downloads the two OpenCV Zoo models at build time.
+!ai_service/models/minifasnet_v2_2.7_80x80.onnx
