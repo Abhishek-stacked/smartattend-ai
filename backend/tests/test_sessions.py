@@ -57,6 +57,12 @@ def test_session_snapshots_roster_and_blocks_overlap(admin_client, db):
     assert [r["registration_number"] for r in roster] == ["CS21-001", "CS21-002"]
     assert all(r["status"] is None for r in roster)
 
+    stats = admin_client.get(f"/api/sessions/{body['id']}/stats")
+    assert stats.status_code == 200, stats.text
+    assert stats.json()["participants"] == 2
+    assert stats.json()["unmarked"] == 2
+    assert stats.json()["present"] == 0
+
     patched = admin_client.patch(f"/api/sessions/{body['id']}", json={"title": "Lecture 1 revised"},
                                  headers=csrf_headers(admin_client))
     assert patched.status_code == 200
