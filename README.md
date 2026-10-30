@@ -45,6 +45,7 @@ smartattend-ai/
 ├── backend/        FastAPI + SQLAlchemy + Alembic (Python 3.10+)
 ├── frontend/       React + TypeScript + Vite + Tailwind CSS
 ├── ai_service/     Face detection / recognition / liveness (no database access)
+├── e2e/            Playwright end-to-end suite (Page Object Model, real API)
 ├── docs/           Architecture, deployment, database, API, model and UI documentation
 ├── backend/Dockerfile        API image (Alembic on start, non-root user, healthcheck)
 ├── frontend/Dockerfile       SPA build + nginx (security headers, /api reverse proxy)
@@ -114,6 +115,17 @@ Prerequisites: Python 3.10+, Node 20+, PostgreSQL 16 (a portable copy is used in
    cd backend && .venv/Scripts/python -m pytest     # uses smartattend_test (APP_ENV=test)
    cd frontend && npm test && npm run lint && npm run build
    ```
+
+7. **End-to-end tests (Playwright)** — from the repository root:
+
+   ```bash
+   npm install
+   E2E_BASE_URL=https://smartattend-ai-sblb.onrender.com E2E_CHANNEL=chrome npx playwright test
+   ```
+
+   Page Object Model suite that drives the real SPA against the real API. It is
+   read-only, so it is safe against the public demo. See [e2e/README.md](e2e/README.md)
+   for the credentials variables and reports.
 
 `APP_ENV=test` makes the backend refuse to run unless `TEST_DATABASE_URL` is set and differs from
 `DATABASE_URL`, so the test suite cannot touch development data.

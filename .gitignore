@@ -26,6 +26,12 @@ ai_service/evaluation/results/
 **/participant_images/
 *.npy
 
+# Playwright
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
+
 # Tooling / OS
 .tools/
 .idea/
