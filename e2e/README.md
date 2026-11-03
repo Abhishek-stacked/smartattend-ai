@@ -5,6 +5,10 @@ either against the deployed instance or a local preview, and they are read-only:
 no test creates, deactivates or erases a person, so they are safe to point at the
 public demo.
 
+The same page objects drive the Gherkin suite in [`features/`](../features) —
+`npm run bdd` runs those scenarios on this runner; see
+[features/README.md](../features/README.md).
+
 ```
 e2e/
   pages/        # Page Object Model: locators live here, specs stay readable
@@ -46,6 +50,11 @@ credentials are never committed, so the register journeys stay skipped in CI.
 
 Reports are written to `playwright-report/` (`npx playwright show-report`), and
 traces and screenshots of failures to `test-results/`. Both are ignored by git.
+Every run additionally writes Allure results to `allure-results/` through the
+`allure-playwright` reporter (set `E2E_ALLURE=0` to skip it); the Allure HTML is
+generated in CI, because the Allure command line needs a JVM that this project's
+development laptop does not run. See
+[docs/automation-reporting.md](../docs/automation-reporting.md).
 Video recording is off on purpose: it needs Playwright's bundled ffmpeg download,
 and traces already capture every action and network call.
 

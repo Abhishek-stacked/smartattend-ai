@@ -127,6 +127,19 @@ Prerequisites: Python 3.10+, Node 20+, PostgreSQL 16 (a portable copy is used in
    read-only, so it is safe against the public demo. See [e2e/README.md](e2e/README.md)
    for the credentials variables and reports.
 
+8. **BDD, CI and reports** — from the repository root:
+
+   ```bash
+   npm install
+   npm run bdd        # Gherkin scenarios in features/ through playwright-bdd
+   ```
+
+   `.github/workflows/automation.yml` runs the backend, frontend, contract,
+   Playwright and Gherkin suites and builds one merged Allure report; `Jenkinsfile`
+   mirrors the same stages. Every run writes `allure-results*/` JSON next to the
+   Playwright HTML report — see
+   [docs/automation-reporting.md](docs/automation-reporting.md).
+
 `APP_ENV=test` makes the backend refuse to run unless `TEST_DATABASE_URL` is set and differs from
 `DATABASE_URL`, so the test suite cannot touch development data.
 

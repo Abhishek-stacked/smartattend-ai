@@ -4,13 +4,19 @@
     "build": "npm --prefix frontend run build",
     "e2e": "playwright test",
     "e2e:headed": "playwright test --headed",
-    "e2e:report": "playwright show-report"
+    "e2e:report": "playwright show-report",
+    "bdd": "bddgen -c playwright-bdd.config.ts && playwright test -c playwright-bdd.config.ts",
+    "bdd:codegen": "bddgen -c playwright-bdd.config.ts",
+    "bdd:headed": "bddgen -c playwright-bdd.config.ts && playwright test -c playwright-bdd.config.ts --headed",
+    "bdd:report": "playwright show-report playwright-report-bdd"
   },
   "dependencies": {
     "@neon/config": "^1.9.5",
     "@neon/env": "^1.6.6"
   },
   "devDependencies": {
-    "@playwright/test": "^1.64.1"
+    "@playwright/test": "^1.64.1",
+    "allure-playwright": "^3.14.0",
+    "playwright-bdd": "^9.2.1"
   }
 }

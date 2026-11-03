@@ -28,9 +28,23 @@ ai_service/evaluation/results/
 
 # Playwright
 playwright-report/
+playwright-report-bdd/
 test-results/
+test-results-bdd/
 blob-report/
 playwright/.cache/
+
+# Allure: results are generated on every run, the HTML report is built in CI
+allure-results/
+allure-results-*/
+allure-report/
+alluredir/
+
+# Gherkin -> Playwright code generation output (never edited by hand)
+features/.features-gen/
+
+# JUnit XML from CI test runs
+frontend/reports/
 
 # Tooling / OS
 .tools/

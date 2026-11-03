@@ -1,0 +1,413 @@
+name: Automation suite
+
+# One pipeline for every automated check in this repository:
+#   api-unit        -> backend/tests (101 pytest tests against real PostgreSQL)
+#   api-contract    -> api_contract  (HTTP/JSON-schema checks against a deployed instance)
+#   frontend-unit   -> frontend      (54 Vitest tests)
+#   e2e             -> e2e/tests     (9 Playwright specs)
+#   e2e-crossbrowser-> e2e/tests     (the public specs on Firefox + WebKit)
+#   bdd             -> features      (Gherkin scenarios through playwright-bdd)
+#   allure-report   -> merges every allure-results* artifact into one Allure HTML report
+#
+# The browser suites point at the deployed demo instance. The free Render tier is
+# single-instance and the login endpoint is rate limited to 10 sign-ins per minute,
+# so this workflow keeps one run per ref at a time and runs the credentialed jobs
+# serially (--workers=1) instead of firing ten parallel logins at a shared account.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Target origin for the browser and HTTP contract suites
+        required: false
+        default: https://smartattend-ai-sblb.onrender.com
+      pytest_keyword:
+        description: Optional pytest -k expression to narrow the backend run
+        required: false
+        default: ""
+
+concurrency:
+  group: automation-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  E2E_BASE_URL: ${{ github.event.inputs.base_url || vars.E2E_BASE_URL || 'https://smartattend-ai-sblb.onrender.com' }}
+  # The faculty demo account is published in README.md, so it is not a secret.
+  # A repository secret of the same name overrides it when the demo rotates.
+  E2E_EMAIL: ${{ secrets.E2E_EMAIL || 'abhishek.mishra@faculty.edu' }}
+  E2E_PASSWORD: ${{ secrets.E2E_PASSWORD || 'SmartAttend2026' }}
+  # Administrator passwords are deliberately never committed. When the secrets
+  # are absent the admin journeys skip (see e2e/tests/access-control.spec.ts),
+  # so the job still goes green.
+  E2E_ADMIN_EMAIL: ${{ secrets.E2E_ADMIN_EMAIL }}
+  E2E_ADMIN_PASSWORD: ${{ secrets.E2E_ADMIN_PASSWORD }}
+  # Used by api_contract/conftest.py for its single signed-in session.
+  API_TEST_EMAIL: ${{ secrets.API_TEST_EMAIL }}
+  API_TEST_PASSWORD: ${{ secrets.API_TEST_PASSWORD }}
+  API_BASE_URL: ${{ github.event.inputs.base_url || vars.E2E_BASE_URL || 'https://smartattend-ai-sblb.onrender.com' }}
+
+jobs:
+  api-unit:
+    name: Backend API tests (pytest + PostgreSQL 16)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        # Same major + variant as the db service in docker-compose.yml.
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: smartattend
+          POSTGRES_PASSWORD: smartattend
+          POSTGRES_DB: smartattend
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U smartattend -d smartattend"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      # The SQLAlchemy engine is created with the psycopg 3 driver, which is what
+      # backend/requirements.txt pins (psycopg[binary]); postgresql:// would ask
+      # for psycopg2 and fail. conftest.py TRUNCATEs the whole schema between
+      # tests, so PostgreSQL is required — SQLite cannot run this suite.
+      DATABASE_URL: postgresql+psycopg://smartattend:smartattend@localhost:5432/smartattend
+      TEST_DATABASE_URL: postgresql+psycopg://smartattend:smartattend@localhost:5432/smartattend_test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+          cache-dependency-path: |
+            backend/requirements.txt
+            backend/requirements-dev.txt
+
+      - name: Install backend dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements-dev.txt
+
+      - name: Create the test database
+        # APP_ENV=test refuses to start unless TEST_DATABASE_URL differs from
+        # DATABASE_URL, so the suite gets its own database next to the app one.
+        run: |
+          python - <<'PY'
+          import os
+          import psycopg
+
+          maintenance_dsn = os.environ["DATABASE_URL"].rsplit("/", 1)[0] + "/postgres"
+          with psycopg.connect(maintenance_dsn, autocommit=True) as conn:
+              exists = conn.execute(
+                  "SELECT 1 FROM pg_database WHERE datname = %s", ("smartattend_test",)
+              ).fetchone()
+              if not exists:
+                  conn.execute("CREATE DATABASE smartattend_test")
+                  print("created smartattend_test")
+          PY
+
+      - name: Run pytest
+        working-directory: backend
+        # The optional workflow_dispatch input narrows the run; an empty
+        # expression is left out entirely rather than passed as `-k ""`.
+        run: |
+          K="${{ github.event.inputs.pytest_keyword }}"
+          if [ -n "$K" ]; then
+            pytest --alluredir=../allure-results-api -k "$K"
+          else
+            pytest --alluredir=../allure-results-api
+          fi
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-api
+          path: allure-results-api/
+          if-no-files-found: warn
+          retention-days: 14
+
+  api-contract:
+    name: HTTP contract checks against the deployed API
+    runs-on: ubuntu-latest
+    # Only schedule this job once the contract suite exists in the branch.
+    if: ${{ hashFiles('api_contract/*.py', 'api_contract/**/*.py') != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+          cache-dependency-path: backend/requirements-dev.txt
+
+      - name: Install contract-suite dependencies
+        # httpx/jsonschema/allure-pytest are pinned to the versions the suite was
+        # written and verified against.
+        run: pip install httpx==0.28.1 jsonschema==4.23.0 allure-pytest==2.13.5
+
+      - name: Run the HTTP contract suite
+        # Read-only: GETs plus one login per session; the suite skips its
+        # signed-in checks when API_TEST_EMAIL / API_TEST_PASSWORD are absent.
+        run: pytest api_contract --alluredir=allure-results-contract -p no:cacheprovider
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-contract
+          path: allure-results-contract/
+          if-no-files-found: warn
+          retention-days: 14
+
+  frontend-unit:
+    name: Frontend unit tests (Vitest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Run Vitest
+        working-directory: frontend
+        run: npm test
+
+      # A coverage report only exists once a provider (@vitest/coverage-v8) and a
+      # `coverage` script are added to frontend/package.json; until then this step
+      # uploads nothing instead of failing the pipeline.
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage
+          path: frontend/coverage/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  e2e:
+    name: Playwright specs (chromium, signed-in)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Chromium from Playwright's own build is the reliable choice here:
+      # `--with-deps` installs the exact system libraries for the browser version
+      # the runner expects. E2E_CHANNEL=chrome (reusing an installed Chrome) is a
+      # laptop-only trick — on GitHub runners there is nothing to avoid downloading,
+      # and Google Chrome from the apt repo adds a moving target to the run.
+      - name: Install the chromium browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run the Playwright specs
+        # Serial workers: the shared demo account must not exceed 10 sign-ins/min.
+        run: npx playwright test --workers=1
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-e2e
+          path: allure-results/
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Upload the Playwright HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          if-no-files-found: ignore
+          retention-days: 14
+
+      # Traces and screenshots of failures; the HTML report already links them,
+      # this artifact is the raw copy for the run.
+      - name: Upload failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  e2e-crossbrowser:
+    name: Playwright specs (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    needs: e2e
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [firefox, webkit]
+    env:
+      # No credentials for this matrix: the signed-in journeys skip, so each
+      # browser only exercises the public specs and never touches the login
+      # rate limit more than its one invalid-credential attempt does.
+      E2E_EMAIL: ""
+      E2E_PASSWORD: ""
+      E2E_ADMIN_EMAIL: ""
+      E2E_ADMIN_PASSWORD: ""
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install ${{ matrix.browser }}
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Run the specs on ${{ matrix.browser }}
+        # E2E_ALL_BROWSERS=1 is what adds the firefox/webkit projects to
+        # playwright.config.ts in the first place.
+        env:
+          E2E_ALL_BROWSERS: "1"
+        run: npx playwright test --project=${{ matrix.browser }} --workers=1
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-${{ matrix.browser }}
+          path: allure-results/
+          if-no-files-found: warn
+          retention-days: 14
+
+  bdd:
+    name: Gherkin scenarios (playwright-bdd)
+    runs-on: ubuntu-latest
+    # After the spec run, not beside it: both suites sign in to the same demo
+    # account and the endpoint allows 10 sign-ins per minute.
+    needs: e2e
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install the chromium browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Generate Playwright tests from the feature files
+        run: npm run bdd:codegen
+
+      - name: Run the BDD suite
+        # `bddgen` above already wrote features/.features-gen; run the generated
+        # specs with the dedicated BDD config.
+        run: npx playwright test -c playwright-bdd.config.ts --workers=1
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-bdd
+          path: allure-results-bdd/
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Upload the BDD HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-bdd
+          path: playwright-report-bdd/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  allure-report:
+    name: Publish the Allure HTML report
+    runs-on: ubuntu-latest
+    needs: [api-unit, api-contract, frontend-unit, e2e, e2e-crossbrowser, bdd]
+    # Publish even when a suite is red — that is exactly when the report matters.
+    if: always()
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install the Allure commandline
+        # Pinned: the report must look the same from run to run.
+        run: npm install --global allure-commandline@2.46.1
+
+      - name: Download every allure-results artifact
+        uses: actions/download-artifact@v4
+        with:
+          pattern: allure-results-*
+          merge-multiple: true
+          path: allure-results-merged
+
+      - name: Generate the Allure HTML report
+        run: |
+          echo "Collected $(find allure-results-merged -type f | wc -l) result files:"
+          find allure-results-merged -name '*-result.json' | sed 's#.*/##' | head -50
+          if find allure-results-merged -name '*-result.json' | grep -q .; then
+            allure generate allure-results-merged --clean -o allure-report
+          else
+            echo "No allure-results were published by the upstream jobs."
+            mkdir -p allure-report
+            printf '%s' '<html><body><h1>Allure report unavailable</h1>\
+          <p>No allure-results artifacts were produced by this run.</p></body></html>' \
+              > allure-report/index.html
+          fi
+
+      - name: Upload the Allure report as a run artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report/
+          retention-days: 14
+
+      # Repository Settings -> Pages -> Build and deployment source: "GitHub Actions"
+      # turns this into a stable https://<owner>.github.io/<repo>/ URL on main.
+      # On fork pull requests the Pages token is read-only, so it is main-only.
+      - name: Upload the Allure report to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: allure-report
+
+      # With Pages enabled, add a `deploy` job using actions/deploy-pages@v3 that
+      # needs this job; the artifact above is already in the shape it expects.

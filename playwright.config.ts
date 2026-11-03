@@ -1,10 +1,11 @@
-import { defineConfig, devices } from "@playwright/test";
+import { defineConfig, devices, type ReporterDescription } from "@playwright/test";
 
 // Point the suite at any environment with E2E_BASE_URL; the default is the
 // local preview server that `npm --prefix frontend run preview` starts.
 // E2E_CHANNEL=chrome reuses an installed Chrome instead of downloading a
 // Playwright browser; E2E_ALL_BROWSERS=1 adds the Firefox and WebKit projects
 // (requires `npx playwright install firefox webkit`).
+// E2E_ALLURE=0 drops the Allure reporter from the run.
 const baseURL = process.env.E2E_BASE_URL ?? "http://localhost:4173";
 const channel = process.env.E2E_CHANNEL;
 const allBrowsers = process.env.E2E_ALL_BROWSERS === "1";
@@ -16,6 +17,26 @@ function project(name: string, device: (typeof devices)[string]) {
   };
 }
 
+// `list` for the console, `html` for the local Playwright dashboard and
+// `allure-playwright` for the rich aggregated report consumed in CI. Allure is
+// optional by design: the suite still runs on a machine where the package was
+// never installed, instead of failing at config load.
+function reporters(): ReporterDescription[] {
+  const active: ReporterDescription[] = [
+    ["list"],
+    ["html", { outputFolder: "playwright-report", open: "never" }],
+  ];
+  if (process.env.E2E_ALLURE !== "0") {
+    try {
+      require.resolve("allure-playwright");
+      active.push(["allure-playwright", { resultsDir: "allure-results", detail: true, suiteTitle: true }]);
+    } catch {
+      console.warn("allure-playwright is not installed; skipping the Allure reporter.");
+    }
+  }
+  return active;
+}
+
 export default defineConfig({
   testDir: "./e2e/tests",
   outputDir: "test-results",
@@ -23,7 +44,7 @@ export default defineConfig({
   expect: { timeout: 15_000 },
   fullyParallel: true,
   retries: process.env.CI ? 2 : 0,
-  reporter: [["list"], ["html", { outputFolder: "playwright-report", open: "never" }]],
+  reporter: reporters(),
   use: {
     baseURL,
     trace: "retain-on-failure",
