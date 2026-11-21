@@ -282,9 +282,9 @@ export function SessionDetailPage() {
             ].map((item) => (
               <div
                 key={item.label}
-                className="rounded-xl border border-white/80 bg-gradient-to-b from-white to-slate-50/70 px-3 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_6px_14px_-12px_rgba(30,27,75,0.55)]"
+                className="rounded-xl border border-white/80 bg-gradient-to-b from-white to-slate-50/70 px-3 py-2.5"
               >
-                <dt className="text-xs uppercase tracking-wide text-slate-500">{item.label}</dt>
+                <dt className="text-xs text-slate-500">{item.label}</dt>
                 <dd className="mt-0.5 font-medium text-slate-800">{item.value}</dd>
               </div>
             ))}
@@ -295,7 +295,7 @@ export function SessionDetailPage() {
             {summary.map((item) => (
               <div
                 key={item.label}
-                className="rounded-xl border border-white/80 bg-gradient-to-b from-white to-slate-50/70 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_6px_14px_-12px_rgba(30,27,75,0.55)]"
+                className="rounded-xl border border-white/80 bg-gradient-to-b from-white to-slate-50/70 p-3"
               >
                 <p className="flex items-center gap-1 text-xs text-slate-500">
                   <item.icon aria-hidden className="size-3.5" /> {item.label}
@@ -350,7 +350,7 @@ export function SessionDetailPage() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[900px] text-left text-sm">
               <caption className="sr-only">Session roster</caption>
-              <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+              <thead className="bg-slate-50 text-xs text-slate-500">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-medium">Student</th>
                   <th scope="col" className="px-4 py-3 font-medium">Biometrics</th>
@@ -360,7 +360,7 @@ export function SessionDetailPage() {
                   <th scope="col" className="px-4 py-3 text-right font-medium">Manual mark</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-line">
                 {roster.map((entry) => (
                   <tr key={entry.student_id} className="hover:bg-slate-50/60">
                     <td className="px-4 py-3">

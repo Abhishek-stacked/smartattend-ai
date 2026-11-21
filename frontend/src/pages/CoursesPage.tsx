@@ -296,7 +296,7 @@ function RosterModal({
       <div className="space-y-4">
         {error && <Alert tone="error">{error}</Alert>}
         {canManage && (
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+          <div className="rounded-lg border border-line bg-slate-50 p-3">
             <div className="relative">
               <Search aria-hidden className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
               <input
@@ -305,11 +305,11 @@ function RosterModal({
                 onChange={(e) => setStudentQuery(e.target.value)}
                 placeholder="Search active students to enroll"
                 aria-label="Search students to enroll"
-                className="h-9 w-full rounded-lg border border-slate-300 bg-white pl-9 pr-3 text-sm shadow-sm placeholder:text-slate-400 focus:border-brand-500"
+                className="h-9 w-full control pl-9 pr-3"
               />
             </div>
             {candidates.length > 0 && (
-              <ul className="mt-2 divide-y divide-slate-200 rounded-lg border border-slate-200 bg-white">
+              <ul className="mt-2 divide-y divide-line rounded-lg border border-line bg-raised">
                 {candidates.map((s) => (
                   <li key={s.id} className="flex items-center justify-between gap-2 px-3 py-2 text-sm">
                     <span>
@@ -341,17 +341,17 @@ function RosterModal({
             description={canManage ? "Search above to add students." : "The administrator has not enrolled anyone yet."}
           />
         ) : (
-          <div className="max-h-80 overflow-y-auto rounded-lg border border-slate-200">
+          <div className="max-h-80 overflow-y-auto rounded-lg border border-line">
             <table className="w-full text-left text-sm">
               <caption className="sr-only">Course roster</caption>
-              <thead className="sticky top-0 bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+              <thead className="sticky top-0 bg-slate-50 text-xs text-slate-500">
                 <tr>
                   <th scope="col" className="px-3 py-2 font-medium">Student</th>
                   <th scope="col" className="px-3 py-2 font-medium">Biometrics</th>
                   {canManage && <th scope="col" className="px-3 py-2 text-right font-medium">Action</th>}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 bg-white">
+              <tbody className="divide-y divide-line bg-raised">
                 {roster.map((r) => (
                   <tr key={r.student_id}>
                     <td className="px-3 py-2">
@@ -584,7 +584,7 @@ export function CoursesPage() {
               }}
               placeholder="Search code or name"
               aria-label="Search courses"
-              className="h-9 w-full rounded-lg border border-slate-300 bg-white pl-9 pr-3 text-sm shadow-sm placeholder:text-slate-400 focus:border-brand-500"
+              className="h-9 w-full control pl-9 pr-3"
             />
           </div>
           <select
@@ -594,7 +594,7 @@ export function CoursesPage() {
               setPage(1);
             }}
             aria-label="Filter by status"
-            className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm"
+            className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm shadow-control"
           >
             <option value="">Any status</option>
             <option value="active">Active</option>
@@ -616,7 +616,7 @@ export function CoursesPage() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[760px] text-left text-sm">
               <caption className="sr-only">Courses</caption>
-              <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+              <thead className="bg-slate-50 text-xs text-slate-500">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-medium">Course</th>
                   <th scope="col" className="px-4 py-3 font-medium">Faculty</th>
@@ -625,7 +625,7 @@ export function CoursesPage() {
                   <th scope="col" className="px-4 py-3 text-right font-medium">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-line">
                 {data.items.map((c) => (
                   <tr key={c.id} className={cx("hover:bg-slate-50/60", c.status !== "active" && "opacity-70")}>
                     <td className="px-4 py-3">

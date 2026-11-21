@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { api, ApiError, query } from "../lib/api";
-import { cx, formatDate, formatDateTime, percent, roleLabel } from "../lib/format";
+import { formatDate, formatDateTime, percent, roleLabel } from "../lib/format";
 import { STATUS_COLORS } from "../lib/reportColors";
 import { attendanceLabel, attendanceTone, sessionTone } from "../lib/attendance";
 import { navFor } from "../lib/navigation";
@@ -74,31 +74,12 @@ function greeting(): string {
   return "Good evening";
 }
 
-function Stat({
-  label,
-  value,
-  hint,
-  accent = "from-brand-400 via-brand-500 to-accent-400",
-}: {
-  label: string;
-  value: string;
-  hint?: string;
-  accent?: string;
-}) {
+function Stat({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
-    <div className="panel panel-edge group relative overflow-hidden rounded-2xl p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">
-      <span
-        aria-hidden
-        className={cx(
-          "absolute -right-6 -top-8 size-24 rounded-full bg-gradient-to-br opacity-20 blur-2xl transition-opacity duration-300 group-hover:opacity-40",
-          accent,
-        )}
-      />
-      <p className="text-xs font-medium uppercase tracking-wide text-slate-500">{label}</p>
-      <p className="mt-1.5 bg-gradient-to-br from-slate-900 to-brand-700 bg-clip-text text-2xl font-semibold tabular-nums text-transparent">
-        {value}
-      </p>
-      {hint && <p className="mt-1 text-xs text-slate-500">{hint}</p>}
+    <div className="panel p-4">
+      <p className="text-xs font-medium text-fg-muted">{label}</p>
+      <p className="num mt-2 text-[26px] font-semibold leading-none tracking-tight text-fg">{value}</p>
+      {hint && <p className="mt-2 text-xs text-fg-faint">{hint}</p>}
     </div>
   );
 }
@@ -217,7 +198,7 @@ export function DashboardPage() {
                 value={period}
                 onChange={(event) => setPeriod(event.target.value as Period)}
                 aria-label="Reporting period"
-                className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm"
+                className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm shadow-control"
               >
                 {(Object.keys(PERIODS) as Period[]).map((key) => (
                   <option key={key} value={key}>
@@ -230,7 +211,7 @@ export function DashboardPage() {
               type="button"
               onClick={refresh}
               aria-label="Refresh dashboard"
-              className="inline-flex size-9 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-600 shadow-sm hover:bg-slate-50"
+              className="inline-flex size-9 items-center justify-center rounded-lg border border-slate-300 bg-raised text-slate-600 shadow-control hover:bg-raised"
             >
               <RefreshCw aria-hidden className={loading ? "size-4 animate-spin" : "size-4"} />
             </button>
@@ -245,7 +226,7 @@ export function DashboardPage() {
       )}
 
       {!summary ? (
-        <div className="rounded-xl border border-slate-200 bg-white p-12 text-center shadow-sm">
+        <div className="rounded-xl border border-line bg-raised p-12 text-center shadow-control">
           <Spinner label="Loading attendance analytics" />
         </div>
       ) : (
@@ -255,25 +236,21 @@ export function DashboardPage() {
               label="Attendance rate"
               value={percent(summary.attendance_rate)}
               hint={`${summary.present + summary.late} of ${marked} marked`}
-              accent="from-emerald-400 via-teal-400 to-accent-400"
             />
             <Stat
               label="Present"
               value={String(summary.present)}
               hint={`${summary.late} late`}
-              accent="from-emerald-300 via-emerald-400 to-teal-400"
             />
             <Stat
               label="Absent"
               value={String(summary.absent)}
               hint={`${summary.excused} excused`}
-              accent="from-rose-300 via-rose-400 to-orange-300"
             />
             <Stat
               label="Sessions"
               value={String(summary.sessions)}
               hint={`${summary.active_sessions} active · ${summary.participants} participants`}
-              accent="from-brand-300 via-brand-400 to-accent-400"
             />
             <Stat
               label={isStaff ? "Needs attention" : "My requests"}
@@ -283,7 +260,6 @@ export function DashboardPage() {
                   ? `${summary.pending_reviews} reviews · ${summary.pending_corrections} corrections`
                   : `${summary.pending_corrections} awaiting review`
               }
-              accent="from-violet-300 via-fuchsia-400 to-brand-400"
             />
           </div>
 
@@ -371,7 +347,7 @@ export function DashboardPage() {
                   title="Attendance by course"
                   description="Present and late are counted as attended."
                   actions={
-                    <Link to="/reports" className="text-sm font-medium text-brand-600 hover:text-brand-700">
+                    <Link to="/reports" className="text-sm font-medium text-brand-300 hover:text-brand-200">
                       Full reports
                     </Link>
                   }
@@ -386,14 +362,14 @@ export function DashboardPage() {
                     <div className="overflow-x-auto">
                       <table className="w-full text-left text-sm">
                         <caption className="sr-only">Attendance by course</caption>
-                        <thead className="text-xs uppercase tracking-wide text-slate-500">
+                        <thead className="text-xs text-slate-500">
                           <tr>
                             <th scope="col" className="pb-2 font-medium">Course</th>
                             <th scope="col" className="pb-2 text-right font-medium">Records</th>
                             <th scope="col" className="pb-2 text-right font-medium">Attendance</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100">
+                        <tbody className="divide-y divide-line">
                           {trends.courses.map((course) => (
                             <tr key={course.course_id}>
                               <td className="py-2.5">
@@ -422,7 +398,7 @@ export function DashboardPage() {
                   title="Latest sessions"
                   description="The five most recent sessions in your scope."
                   actions={
-                    <Link to="/sessions" className="text-sm font-medium text-brand-600 hover:text-brand-700">
+                    <Link to="/sessions" className="text-sm font-medium text-brand-300 hover:text-brand-200">
                       All sessions
                     </Link>
                   }
@@ -434,13 +410,13 @@ export function DashboardPage() {
                       description="Schedule a session to begin taking attendance."
                     />
                   ) : (
-                    <ul className="divide-y divide-slate-100">
+                    <ul className="divide-y divide-line">
                       {activity.sessions.map((session) => (
                         <li key={session.id} className="flex flex-wrap items-center justify-between gap-2 py-2.5">
                           <div className="min-w-0">
                             <Link
                               to={`/sessions/${session.id}`}
-                              className="truncate text-sm font-medium text-slate-900 hover:text-brand-700"
+                              className="truncate text-sm font-medium text-slate-900 hover:text-brand-200"
                             >
                               {session.course_code} · {session.title}
                             </Link>
@@ -465,7 +441,7 @@ export function DashboardPage() {
                 title="Recent attendance"
                 description="Your six most recent records."
                 actions={
-                  <Link to="/attendance" className="text-sm font-medium text-brand-600 hover:text-brand-700">
+                  <Link to="/attendance" className="text-sm font-medium text-brand-300 hover:text-brand-200">
                     All records
                   </Link>
                 }
@@ -480,14 +456,14 @@ export function DashboardPage() {
                   <div className="overflow-x-auto">
                     <table className="w-full text-left text-sm">
                       <caption className="sr-only">Your recent attendance</caption>
-                      <thead className="text-xs uppercase tracking-wide text-slate-500">
+                      <thead className="text-xs text-slate-500">
                         <tr>
                           <th scope="col" className="pb-2 font-medium">Date</th>
                           <th scope="col" className="pb-2 font-medium">Course / session</th>
                           <th scope="col" className="pb-2 font-medium">Status</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-100">
+                      <tbody className="divide-y divide-line">
                         {recent.map((record) => (
                           <tr key={record.id}>
                             <td className="py-2.5 text-slate-600">{formatDate(record.session_date)}</td>
@@ -512,9 +488,9 @@ export function DashboardPage() {
                     <Link
                       key={to}
                       to={to}
-                      className="group flex items-center gap-3 rounded-lg border border-slate-200 px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:border-brand-300 hover:bg-brand-50/50 hover:text-brand-800"
+                      className="group flex items-center gap-3 rounded-lg border border-line px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:border-brand-500/30 hover:bg-brand-500/10 hover:text-brand-100"
                     >
-                      <span className="grid size-8 place-items-center rounded-md bg-slate-100 text-slate-600 group-hover:bg-brand-100 group-hover:text-brand-700">
+                      <span className="grid size-8 place-items-center rounded-md bg-slate-100 text-slate-600 group-hover:bg-brand-500/15 group-hover:text-brand-200">
                         <Icon aria-hidden className="size-4" />
                       </span>
                       {label}
@@ -552,7 +528,7 @@ export function DashboardPage() {
           </dl>
           <Link
             to="/profile"
-            className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-brand-600 hover:text-brand-700"
+            className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-brand-300 hover:text-brand-200"
           >
             Manage account <ArrowRight aria-hidden className="size-4" />
           </Link>

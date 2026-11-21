@@ -208,7 +208,7 @@ export function ReportsPage() {
               setPage(1);
             }}
             aria-label="Report type"
-            className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm"
+            className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm shadow-control"
           >
             {REPORT_GROUPS.map((group) => (
               <optgroup key={group.label} label={group.label}>
@@ -228,7 +228,7 @@ export function ReportsPage() {
               setPage(1);
             }}
             aria-label="Filter by course"
-            className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm"
+            className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm shadow-control"
           >
             <option value="">All courses</option>
             {courses.map((course) => (
@@ -246,7 +246,7 @@ export function ReportsPage() {
                 setPage(1);
               }}
               aria-label="Filter by request status"
-              className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm"
+              className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm shadow-control"
             >
               <option value="">Any request status</option>
               {CORRECTION_STATUSES.map((option) => (
@@ -267,7 +267,7 @@ export function ReportsPage() {
                 setPage(1);
               }}
               aria-label="From date"
-              className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm text-slate-900 shadow-sm"
+              className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm text-slate-900 shadow-control"
             />
           </label>
           <label className="flex items-center gap-1.5 text-xs text-slate-500">
@@ -280,7 +280,7 @@ export function ReportsPage() {
                 setPage(1);
               }}
               aria-label="To date"
-              className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm text-slate-900 shadow-sm"
+              className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm text-slate-900 shadow-control"
             />
           </label>
 
@@ -330,7 +330,7 @@ export function ReportsPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
                   <caption className="sr-only">{REPORT_TITLES[report.type]}</caption>
-                  <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+                  <thead className="bg-slate-50 text-xs text-slate-500">
                     <tr>
                       {report.columns.map((column) => (
                         <th
@@ -343,7 +343,7 @@ export function ReportsPage() {
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-line">
                     {report.rows.map((row, index) => (
                       <tr key={index} className="hover:bg-slate-50/60">
                         {report.columns.map((column) => (

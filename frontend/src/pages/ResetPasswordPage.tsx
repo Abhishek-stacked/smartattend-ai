@@ -45,7 +45,7 @@ export function ResetPasswordPage() {
           </div>
         </div>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="rounded-xl border border-line bg-raised p-6 shadow-control">
           {!token ? (
             <Alert tone="error" title="This link is incomplete">
               Open the full reset link your administrator shared with you.
@@ -84,7 +84,7 @@ export function ResetPasswordPage() {
                 Set new password
               </Button>
               <p className="text-center text-xs text-slate-500">
-                <Link to="/login" className="font-medium text-brand-600 hover:text-brand-700">
+                <Link to="/login" className="font-medium text-brand-300 hover:text-brand-200">
                   Back to sign in
                 </Link>
               </p>

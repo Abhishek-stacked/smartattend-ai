@@ -1,5 +1,6 @@
 import { useId } from "react";
 import type { ReactNode, SelectHTMLAttributes } from "react";
+import { ChevronDown } from "lucide-react";
 import { cx } from "../../lib/format";
 
 export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
@@ -12,22 +13,25 @@ export function Select({ label, hint, className, id, children, ...rest }: Select
   const selectId = id ?? autoId;
   return (
     <div className={cx("space-y-1.5", className)}>
-      <label
-        htmlFor={selectId}
-        className="block font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-slate-500"
-      >
+      <label htmlFor={selectId} className="field-label">
         {label}
       </label>
-      <select
-        id={selectId}
-        aria-describedby={hint ? `${selectId}-hint` : undefined}
-        className="block h-11 w-full rounded-sm border-2 border-slate-300 bg-slate-50 px-2 text-sm text-slate-900 transition-all duration-150 hover:border-slate-400 focus:border-brand-500 focus:shadow-[4px_4px_0_0_#c6f24d] focus:outline-none"
-        {...rest}
-      >
-        {children}
-      </select>
+      <div className="relative">
+        <select
+          id={selectId}
+          aria-describedby={hint ? `${selectId}-hint` : undefined}
+          className="control h-9 cursor-pointer appearance-none pl-3 pr-9 text-sm"
+          {...rest}
+        >
+          {children}
+        </select>
+        <ChevronDown
+          aria-hidden
+          className="pointer-events-none absolute right-2.5 top-1/2 size-4 -translate-y-1/2 text-fg-faint"
+        />
+      </div>
       {hint && (
-        <p id={`${selectId}-hint`} className="text-xs text-slate-500">
+        <p id={`${selectId}-hint`} className="text-[13px] leading-snug text-fg-muted">
           {hint}
         </p>
       )}

@@ -290,7 +290,7 @@ export function FacultyPage() {
               }}
               placeholder="Search name, employee ID or email"
               aria-label="Search faculty"
-              className="h-9 w-full rounded-lg border border-slate-300 bg-white pl-9 pr-3 text-sm shadow-sm placeholder:text-slate-400 focus:border-brand-500"
+              className="h-9 w-full control pl-9 pr-3"
             />
           </div>
           <select
@@ -300,7 +300,7 @@ export function FacultyPage() {
               setPage(1);
             }}
             aria-label="Filter by status"
-            className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm"
+            className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm shadow-control"
           >
             <option value="">Any status</option>
             <option value="active">Active</option>
@@ -322,7 +322,7 @@ export function FacultyPage() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[820px] text-left text-sm">
               <caption className="sr-only">Faculty register</caption>
-              <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+              <thead className="bg-slate-50 text-xs text-slate-500">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-medium">Faculty</th>
                   <th scope="col" className="px-4 py-3 font-medium">Department</th>
@@ -331,7 +331,7 @@ export function FacultyPage() {
                   <th scope="col" className="px-4 py-3 text-right font-medium">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-line">
                 {data.items.map((f) => (
                   <tr key={f.id} className={cx("hover:bg-slate-50/60", f.status !== "active" && "opacity-70")}>
                     <td className="px-4 py-3">
@@ -425,19 +425,19 @@ export function FacultyPage() {
           <div className="space-y-4">
             <dl className="grid grid-cols-2 gap-3 text-sm">
               <div>
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Department</dt>
+                <dt className="text-xs text-slate-500">Department</dt>
                 <dd className="text-slate-800">{detail.department}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Designation</dt>
+                <dt className="text-xs text-slate-500">Designation</dt>
                 <dd className="text-slate-800">{detail.designation}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Portal account</dt>
+                <dt className="text-xs text-slate-500">Portal account</dt>
                 <dd className="text-slate-800">{detail.has_account ? "Active" : "Not created"}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Status</dt>
+                <dt className="text-xs text-slate-500">Status</dt>
                 <dd className="text-slate-800">{detail.status}</dd>
               </div>
             </dl>
@@ -446,7 +446,7 @@ export function FacultyPage() {
               {detail.courses.length === 0 ? (
                 <p className="text-sm text-slate-500">No courses assigned yet.</p>
               ) : (
-                <ul className="divide-y divide-slate-100 rounded-lg border border-slate-200">
+                <ul className="divide-y divide-line rounded-lg border border-line">
                   {detail.courses.map((c) => (
                     <li key={c.course_id} className="flex items-center justify-between gap-3 px-3 py-2 text-sm">
                       <span>

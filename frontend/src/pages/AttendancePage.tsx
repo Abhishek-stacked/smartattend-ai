@@ -200,7 +200,7 @@ export function AttendancePage() {
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Filter this page by student, course or session"
               aria-label="Filter records"
-              className="h-9 w-full rounded-lg border border-slate-300 bg-white pl-9 pr-3 text-sm shadow-sm placeholder:text-slate-400 focus:border-brand-500"
+              className="h-9 w-full control pl-9 pr-3"
             />
           </div>
           {isStaff && (
@@ -211,7 +211,7 @@ export function AttendancePage() {
                 setPage(1);
               }}
               aria-label="Filter by course"
-              className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm"
+              className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm shadow-control"
             >
               <option value="">All courses</option>
               {courses.map((c) => (
@@ -228,7 +228,7 @@ export function AttendancePage() {
               setPage(1);
             }}
             aria-label="Filter by status"
-            className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm"
+            className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm shadow-control"
           >
             <option value="">Any status</option>
             <option value="present">Present</option>
@@ -245,7 +245,7 @@ export function AttendancePage() {
               setPage(1);
             }}
             aria-label="From date"
-            className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm"
+            className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm shadow-control"
           />
           <input
             type="date"
@@ -255,7 +255,7 @@ export function AttendancePage() {
               setPage(1);
             }}
             aria-label="To date"
-            className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm"
+            className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm shadow-control"
           />
         </div>
 
@@ -277,7 +277,7 @@ export function AttendancePage() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[820px] text-left text-sm">
               <caption className="sr-only">Attendance records</caption>
-              <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+              <thead className="bg-slate-50 text-xs text-slate-500">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-medium">Date</th>
                   {isStaff && <th scope="col" className="px-4 py-3 font-medium">Student</th>}
@@ -287,7 +287,7 @@ export function AttendancePage() {
                   <th scope="col" className="px-4 py-3 text-right font-medium">Details</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-line">
                 {items.map((r) => (
                   <tr key={r.id} className="hover:bg-slate-50/60">
                     <td className="px-4 py-3 text-slate-600">{formatDate(r.session_date)}</td>
@@ -357,8 +357,8 @@ export function AttendancePage() {
             </div>
 
             {detail.event && (
-              <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm">
-                <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <div className="rounded-lg border border-line bg-slate-50 p-3 text-sm">
+                <h3 className="mb-2 text-xs font-semibold text-slate-500">
                   Recognition event
                 </h3>
                 <dl className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -407,7 +407,7 @@ export function AttendancePage() {
               ) : (
                 <ol className="space-y-2">
                   {detail.history.map((entry) => (
-                    <li key={entry.id} className="rounded-lg border border-slate-200 px-3 py-2 text-sm">
+                    <li key={entry.id} className="rounded-lg border border-line px-3 py-2 text-sm">
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <span className="font-medium text-slate-800">{entry.action}</span>
                         <span className="text-xs text-slate-500">{formatDateTime(entry.occurred_at)}</span>
@@ -429,7 +429,7 @@ export function AttendancePage() {
             </div>
 
             {isStaff && (
-              <form onSubmit={correct} className="space-y-3 rounded-lg border border-slate-200 p-3">
+              <form onSubmit={correct} className="space-y-3 rounded-lg border border-line p-3">
                 <h3 className="text-sm font-semibold text-slate-900">Record correction</h3>
                 {detailError && <Alert tone="error">{detailError}</Alert>}
                 <Select
@@ -460,7 +460,7 @@ export function AttendancePage() {
             )}
 
             {!isStaff && (
-              <form onSubmit={requestCorrection} className="space-y-3 rounded-lg border border-slate-200 p-3">
+              <form onSubmit={requestCorrection} className="space-y-3 rounded-lg border border-line p-3">
                 <h3 className="text-sm font-semibold text-slate-900">Request a correction</h3>
                 <p className="text-xs text-slate-500">
                   Requests are reviewed by faculty before any change is applied. Once per session while one is pending.

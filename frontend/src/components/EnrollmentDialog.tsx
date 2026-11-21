@@ -273,9 +273,9 @@ export function EnrollmentDialog({
           )}
           {policy ? (
             <>
-              <div className="max-h-64 space-y-3 overflow-y-auto rounded-lg border border-slate-200 bg-slate-50 p-3">
+              <div className="max-h-64 space-y-3 overflow-y-auto rounded-lg border border-line bg-slate-50 p-3">
                 <div>
-                  <p className="text-xs uppercase tracking-wide text-slate-500">Version {policy.policy_version}</p>
+                  <p className="text-xs text-slate-500">Version {policy.policy_version}</p>
                   <h3 className="text-sm font-semibold text-slate-900">{policy.title}</h3>
                 </div>
                 {policy.sections.map((section) => (
@@ -285,12 +285,12 @@ export function EnrollmentDialog({
                   </section>
                 ))}
               </div>
-              <label className="flex items-start gap-3 rounded-lg border border-slate-200 p-3 text-sm text-slate-700">
+              <label className="flex items-start gap-3 rounded-lg border border-line p-3 text-sm text-slate-700">
                 <input
                   type="checkbox"
                   checked={confirmed}
                   onChange={(e) => setConfirmed(e.target.checked)}
-                  className="mt-0.5 size-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                  className="mt-0.5 size-4 rounded border-slate-300 text-brand-300 focus:ring-brand-500"
                 />
                 <span>
                   {selfEnrolled
@@ -317,7 +317,7 @@ export function EnrollmentDialog({
             </p>
           )}
 
-          <div className="relative overflow-hidden border-2 border-slate-300 bg-black">
+          <div className="relative overflow-hidden border border-slate-300 bg-black">
             <video
               ref={camera.videoRef}
               muted
@@ -328,7 +328,7 @@ export function EnrollmentDialog({
             {!camera.active && (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-slate-400">
                 <ScanFace aria-hidden className="size-8" />
-                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-slate-400">Camera is off</p>
+                <p className="font-mono text-xs text-slate-400">Camera is off</p>
                 <Button variant="secondary" onClick={camera.start} loading={camera.starting}>
                   <Camera aria-hidden className="size-4" /> Turn on camera
                 </Button>
@@ -364,7 +364,7 @@ export function EnrollmentDialog({
           </div>
 
           {status && status.template_count > 0 && (
-            <label className="flex items-start gap-3 rounded-sm border-2 border-amber-500/50 bg-amber-500/10 p-3 text-sm text-amber-100">
+            <label className="flex items-start gap-3 rounded-lg border border-amber-500/50 bg-amber-500/10 p-3 text-sm text-amber-100">
               <input
                 type="checkbox"
                 checked={replace}

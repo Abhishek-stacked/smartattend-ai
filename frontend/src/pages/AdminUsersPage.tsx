@@ -216,7 +216,7 @@ export function AdminUsersPage() {
               }}
               placeholder="Search name or email"
               aria-label="Search accounts"
-              className="h-9 w-full rounded-lg border border-slate-300 bg-white pl-9 pr-3 text-sm shadow-sm placeholder:text-slate-400 focus:border-brand-500"
+              className="h-9 w-full control pl-9 pr-3"
             />
           </div>
           <select
@@ -226,7 +226,7 @@ export function AdminUsersPage() {
               setPage(1);
             }}
             aria-label="Filter by role"
-            className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm"
+            className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm shadow-control"
           >
             <option value="">All roles</option>
             <option value="admin">Admin</option>
@@ -240,7 +240,7 @@ export function AdminUsersPage() {
               setPage(1);
             }}
             aria-label="Filter by status"
-            className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm"
+            className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm shadow-control"
           >
             <option value="">Any status</option>
             <option value="true">Active</option>
@@ -262,7 +262,7 @@ export function AdminUsersPage() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[720px] text-left text-sm">
               <caption className="sr-only">User accounts</caption>
-              <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+              <thead className="bg-slate-50 text-xs text-slate-500">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-medium">Account</th>
                   <th scope="col" className="px-4 py-3 font-medium">Role</th>
@@ -271,7 +271,7 @@ export function AdminUsersPage() {
                   <th scope="col" className="px-4 py-3 text-right font-medium">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-line">
                 {data.items.map((u) => (
                   <tr key={u.id} className={cx("hover:bg-slate-50/60", !u.is_active && "opacity-70")}>
                     <td className="px-4 py-3">
@@ -392,7 +392,7 @@ export function AdminUsersPage() {
               Share this link privately with {issued.label}. It works a single time and expires{" "}
               {formatDateTime(issued.reset.expires_at)}. Issuing another link cancels this one.
             </Alert>
-            <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 p-2">
+            <div className="flex items-center gap-2 rounded-lg border border-line bg-slate-50 p-2">
               <code className="min-w-0 flex-1 break-all text-xs text-slate-700">{issued.reset.reset_url}</code>
               <CopyButton value={issued.reset.reset_url} />
             </div>

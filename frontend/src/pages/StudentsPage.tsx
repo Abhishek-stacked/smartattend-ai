@@ -391,7 +391,7 @@ export function StudentsPage() {
               }}
               placeholder="Search name, registration number or email"
               aria-label="Search students"
-              className="h-9 w-full rounded-lg border border-slate-300 bg-white pl-9 pr-3 text-sm shadow-sm placeholder:text-slate-400 focus:border-brand-500"
+              className="h-9 w-full control pl-9 pr-3 text-sm"
             />
           </div>
           <select
@@ -401,7 +401,7 @@ export function StudentsPage() {
               setPage(1);
             }}
             aria-label="Filter by status"
-            className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm"
+            className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm shadow-control"
           >
             <option value="">Any status</option>
             <option value="active">Active</option>
@@ -425,7 +425,7 @@ export function StudentsPage() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[860px] text-left text-sm">
               <caption className="sr-only">Student register</caption>
-              <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+              <thead className="bg-slate-50 text-xs text-slate-500">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-medium">Student</th>
                   <th scope="col" className="px-4 py-3 font-medium">Program</th>
@@ -434,7 +434,7 @@ export function StudentsPage() {
                   <th scope="col" className="px-4 py-3 text-right font-medium">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-line">
                 {data.items.map((s) => (
                   <tr key={s.id} className={cx("hover:bg-slate-50/60", s.status !== "active" && "opacity-70")}>
                     <td className="px-4 py-3">
@@ -530,27 +530,27 @@ export function StudentsPage() {
           <div className="space-y-4">
             <dl className="grid grid-cols-2 gap-3 text-sm">
               <div>
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Program</dt>
+                <dt className="text-xs text-slate-500">Program</dt>
                 <dd className="text-slate-800">{detail.program}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Department</dt>
+                <dt className="text-xs text-slate-500">Department</dt>
                 <dd className="text-slate-800">{detail.department}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Enrolled</dt>
+                <dt className="text-xs text-slate-500">Enrolled</dt>
                 <dd className="text-slate-800">{detail.enrollment_year}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Portal account</dt>
+                <dt className="text-xs text-slate-500">Portal account</dt>
                 <dd className="text-slate-800">{detail.has_account ? "Active" : "Not created"}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Biometric consent</dt>
+                <dt className="text-xs text-slate-500">Biometric consent</dt>
                 <dd className="text-slate-800">{detail.biometric_consented ? "Granted" : "Not granted"}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Face templates</dt>
+                <dt className="text-xs text-slate-500">Face templates</dt>
                 <dd className="text-slate-800">{detail.template_count}</dd>
               </div>
             </dl>
@@ -559,7 +559,7 @@ export function StudentsPage() {
               {detail.enrollments.length === 0 ? (
                 <p className="text-sm text-slate-500">Not enrolled in any course yet.</p>
               ) : (
-                <ul className="divide-y divide-slate-100 rounded-lg border border-slate-200">
+                <ul className="divide-y divide-line rounded-lg border border-line">
                   {detail.enrollments.map((c) => (
                     <li key={c.course_id} className="flex items-center justify-between gap-3 px-3 py-2 text-sm">
                       <span>

@@ -156,7 +156,7 @@ export function SessionsPage() {
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Filter this page by title or course"
               aria-label="Filter sessions"
-              className="h-9 w-full rounded-lg border border-slate-300 bg-white pl-9 pr-3 text-sm shadow-sm placeholder:text-slate-400 focus:border-brand-500"
+              className="h-9 w-full control pl-9 pr-3"
             />
           </div>
           <select
@@ -166,7 +166,7 @@ export function SessionsPage() {
               setPage(1);
             }}
             aria-label="Filter by course"
-            className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm"
+            className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm shadow-control"
           >
             <option value="">All courses</option>
             {courses.map((c) => (
@@ -182,7 +182,7 @@ export function SessionsPage() {
               setPage(1);
             }}
             aria-label="Filter by status"
-            className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm"
+            className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm shadow-control"
           >
             <option value="">Any status</option>
             <option value="scheduled">Scheduled</option>
@@ -200,7 +200,7 @@ export function SessionsPage() {
               setPage(1);
             }}
             aria-label="From date"
-            className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm"
+            className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm shadow-control"
           />
           <input
             type="date"
@@ -210,7 +210,7 @@ export function SessionsPage() {
               setPage(1);
             }}
             aria-label="To date"
-            className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm"
+            className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm shadow-control"
           />
         </div>
 
@@ -228,7 +228,7 @@ export function SessionsPage() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[820px] text-left text-sm">
               <caption className="sr-only">Attendance sessions</caption>
-              <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+              <thead className="bg-slate-50 text-xs text-slate-500">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-medium">Session</th>
                   <th scope="col" className="px-4 py-3 font-medium">Scheduled</th>
@@ -237,7 +237,7 @@ export function SessionsPage() {
                   <th scope="col" className="px-4 py-3 text-right font-medium">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-line">
                 {items.map((s) => {
                   const marked = s.counts.participants - s.counts.unmarked;
                   return (

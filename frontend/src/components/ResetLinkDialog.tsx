@@ -50,7 +50,7 @@ export function ResetLinkDialog({
             Share this link privately with {label}. It works a single time and expires{" "}
             {formatDateTime(reset.expires_at)}. Issuing another link cancels this one.
           </Alert>
-          <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 p-2">
+          <div className="flex items-center gap-2 rounded-lg border border-line bg-slate-50 p-2">
             <code className="min-w-0 flex-1 break-all text-xs text-slate-700">{reset.reset_url}</code>
             <CopyButton value={reset.reset_url} />
           </div>

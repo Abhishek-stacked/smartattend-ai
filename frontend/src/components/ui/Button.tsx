@@ -7,17 +7,18 @@ type Size = "sm" | "md";
 
 const VARIANTS: Record<Variant, string> = {
   primary:
-    "border-2 border-brand-500 bg-brand-500 text-[#08080a] shadow-[5px_5px_0_0_#000] hover:-translate-y-0.5 hover:shadow-[7px_7px_0_0_#000] active:translate-x-1 active:translate-y-1 active:shadow-none disabled:border-slate-300 disabled:bg-slate-200 disabled:text-slate-500 disabled:shadow-none disabled:hover:translate-y-0",
+    "border border-brand-600 bg-brand-600 text-white shadow-control hover:border-brand-500 hover:bg-brand-500 active:bg-brand-700 disabled:border-brand-600/30 disabled:bg-brand-600/25 disabled:text-white/60",
   secondary:
-    "border-2 border-slate-300 bg-slate-100 text-slate-900 shadow-[5px_5px_0_0_#000] hover:-translate-y-0.5 hover:border-brand-500 hover:text-brand-700 hover:shadow-[7px_7px_0_0_#000] active:translate-x-1 active:translate-y-1 active:shadow-none disabled:text-slate-500 disabled:shadow-none disabled:hover:translate-y-0",
-  ghost: "border-2 border-transparent text-slate-600 hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900",
+    "border border-line-strong bg-raised text-fg shadow-control hover:border-line-hover hover:bg-surface-hover active:bg-surface-pressed disabled:border-line disabled:bg-panel disabled:text-fg-faint",
+  ghost:
+    "border border-transparent bg-transparent text-fg-muted hover:bg-raised hover:text-fg disabled:text-fg-faint disabled:hover:bg-transparent",
   danger:
-    "border-2 border-rose-500 bg-rose-500 text-[#08080a] shadow-[5px_5px_0_0_#000] hover:-translate-y-0.5 hover:bg-rose-400 hover:shadow-[7px_7px_0_0_#000] active:translate-x-1 active:translate-y-1 active:shadow-none disabled:border-slate-300 disabled:bg-slate-200 disabled:text-slate-500 disabled:shadow-none disabled:hover:translate-y-0",
+    "border border-rose-600 bg-rose-600 text-white shadow-control hover:border-rose-500 hover:bg-rose-500 active:bg-rose-700 disabled:border-rose-600/30 disabled:bg-rose-600/25 disabled:text-white/60",
 };
 
 const SIZES: Record<Size, string> = {
-  sm: "h-8 gap-1.5 px-3 text-[11px]",
-  md: "h-10 gap-2 px-4 text-xs",
+  sm: "h-8 gap-1.5 px-2.5 text-[13px]",
+  md: "h-9 gap-2 px-3.5 text-sm",
 };
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -42,7 +43,10 @@ export function Button({
       disabled={disabled || loading}
       aria-busy={loading || undefined}
       className={cx(
-        "press-3d inline-flex select-none items-center justify-center whitespace-nowrap rounded-sm font-mono font-semibold uppercase tracking-[0.12em] transition-all duration-150 disabled:cursor-not-allowed",
+        "inline-flex select-none items-center justify-center whitespace-nowrap rounded-lg font-medium",
+        "transition-[background-color,border-color,color] duration-150",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ink",
+        "disabled:cursor-not-allowed",
         VARIANTS[variant],
         SIZES[size],
         className,

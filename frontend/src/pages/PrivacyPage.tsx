@@ -109,7 +109,7 @@ export function PrivacyPage() {
             <div className="space-y-4">
               <dl className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <dt className="text-xs uppercase tracking-wide text-slate-500">Consent</dt>
+                  <dt className="text-xs text-slate-500">Consent</dt>
                   <dd className="mt-1">
                     <Badge tone={consentTone}>
                       {consent ? (consent.status === "granted" ? "Granted" : "Withdrawn") : "Not recorded"}
@@ -117,32 +117,32 @@ export function PrivacyPage() {
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs uppercase tracking-wide text-slate-500">Notice version</dt>
+                  <dt className="text-xs text-slate-500">Notice version</dt>
                   <dd className="mt-1 text-slate-800">{consent?.policy_version ?? "—"}</dd>
                 </div>
                 <div>
-                  <dt className="text-xs uppercase tracking-wide text-slate-500">Consent recorded</dt>
+                  <dt className="text-xs text-slate-500">Consent recorded</dt>
                   <dd className="mt-1 text-slate-800">{formatDateTime(consent?.granted_at)}</dd>
                 </div>
                 <div>
-                  <dt className="text-xs uppercase tracking-wide text-slate-500">Withdrawn</dt>
+                  <dt className="text-xs text-slate-500">Withdrawn</dt>
                   <dd className="mt-1 text-slate-800">{formatDateTime(consent?.withdrawn_at)}</dd>
                 </div>
                 <div>
-                  <dt className="text-xs uppercase tracking-wide text-slate-500">Stored templates</dt>
+                  <dt className="text-xs text-slate-500">Stored templates</dt>
                   <dd className="mt-1 flex items-center gap-1.5 text-slate-800">
                     <Fingerprint aria-hidden className="size-4 text-slate-400" />
                     {status?.template_count ?? 0}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-xs uppercase tracking-wide text-slate-500">Model</dt>
+                  <dt className="text-xs text-slate-500">Model</dt>
                   <dd className="mt-1 text-slate-800">
                     {status ? `${status.model} ${status.model_version}` : "—"}
                   </dd>
                 </div>
                 <div className="col-span-2">
-                  <dt className="text-xs uppercase tracking-wide text-slate-500">Enrolled</dt>
+                  <dt className="text-xs text-slate-500">Enrolled</dt>
                   <dd className="mt-1 text-slate-800">{formatDateTime(status?.enrolled_at)}</dd>
                 </div>
               </dl>
@@ -215,12 +215,12 @@ export function PrivacyPage() {
       >
         <form id="delete-biometrics" onSubmit={remove} className="space-y-3">
           <Field label="Templates on record" value={String(status?.template_count ?? 0)} readOnly />
-          <label className="flex items-start gap-3 rounded-lg border border-slate-200 p-3 text-sm text-slate-700">
+          <label className="flex items-start gap-3 rounded-lg border border-line p-3 text-sm text-slate-700">
             <input
               type="checkbox"
               checked={withdraw}
               onChange={(e) => setWithdraw(e.target.checked)}
-              className="mt-0.5 size-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+              className="mt-0.5 size-4 rounded border-slate-300 text-brand-300 focus:ring-brand-500"
             />
             <span>Also withdraw my consent, so I am not enrolled again without a fresh notice.</span>
           </label>

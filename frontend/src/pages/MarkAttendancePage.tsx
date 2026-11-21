@@ -127,7 +127,7 @@ export function MarkAttendancePage() {
       ) : (
         <div className="space-y-5">
           <section>
-            <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
+            <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-500">
               <Fingerprint aria-hidden className="size-4" /> Open now
             </h2>
             {open.length === 0 ? (
@@ -143,52 +143,38 @@ export function MarkAttendancePage() {
                   <article
                     key={session.id}
                     className={cx(
-                      "relative overflow-hidden border-2 border-slate-300 bg-[#0b0b0d] p-5 text-chalk shadow-float",
+                      "panel relative overflow-hidden p-5",
                       open.length === 1 && "md:col-span-2",
                     )}
                   >
-                    <div aria-hidden className="orb -right-12 -top-20 size-56 bg-brand-400/40" />
-                    <div aria-hidden className="orb -bottom-24 -left-12 size-52 bg-accent-400/25" />
-                    <div
-                      aria-hidden
-                      className="pointer-events-none absolute inset-0 opacity-[0.08]"
-                      style={{
-                        backgroundImage:
-                          "linear-gradient(rgba(255,255,255,.9) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.9) 1px, transparent 1px)",
-                        backgroundSize: "38px 38px",
-                        maskImage: "radial-gradient(75% 65% at 80% 0%, #000 0%, transparent 72%)",
-                        WebkitMaskImage: "radial-gradient(75% 65% at 80% 0%, #000 0%, transparent 72%)",
-                      }}
-                    />
-
                     <div className="relative">
-                      <div className="mb-2 flex flex-wrap items-center gap-2">
-                        <span className="inline-flex items-center gap-1.5 border border-emerald-500/60 bg-emerald-500/15 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-300">
+                      <div className="mb-3 flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/12 px-2 py-0.5 text-xs font-medium text-emerald-300">
                           <span className="relative flex size-1.5">
                             <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
                             <span className="relative inline-flex size-1.5 rounded-full bg-emerald-400" />
                           </span>
                           Live now
                         </span>
-                        <span className="border border-slate-300 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-400">
+                        <span className="rounded-full border border-line bg-raised px-2 py-0.5 text-xs text-fg-muted">
                           {session.course_code}
                         </span>
                       </div>
-                      <h3 className="text-lg font-semibold uppercase tracking-tight text-chalk">{session.title}</h3>
-                      <p className="mt-1 text-sm text-slate-400">
+                      <h3 className="text-base font-semibold tracking-tight text-fg">{session.title}</h3>
+                      <p className="mt-1 text-sm text-fg-muted">
                         {session.course_name} · starts {formatDateTime(session.scheduled_start)}
                       </p>
 
-                      <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t-2 border-slate-200 pt-4">
-                        <span className="flex items-center gap-2 border-2 border-slate-300 px-2.5 py-1.5 font-mono text-[10.5px] uppercase tracking-[0.12em] text-slate-400">
-                          <Timer aria-hidden className="size-4 text-accent-300" />
+                      <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
+                        <span className="inline-flex items-center gap-2 rounded-lg border border-line bg-inset px-2.5 py-1.5 text-xs text-fg-muted">
+                          <Timer aria-hidden className="size-4 text-fg-faint" />
                           Closes in
-                          <span className="font-semibold tabular-nums text-brand-500">
+                          <span className="num font-mono font-semibold text-emerald-300">
                             {countdown(session.self_marking_closes_at, now)}
                           </span>
                         </span>
                         <Button
-                          className="press-3d h-11 border-emerald-400 bg-emerald-400 text-[#04150d] shadow-[5px_5px_0_0_#000] hover:-translate-y-0.5 hover:bg-emerald-300 hover:shadow-[7px_7px_0_0_#000]"
+                          className="border-emerald-600 bg-emerald-600 hover:border-emerald-500 hover:bg-emerald-500 active:bg-emerald-700"
                           loading={busyId === session.id}
                           onClick={() => void mark(session)}
                         >
@@ -204,11 +190,11 @@ export function MarkAttendancePage() {
 
           {upcoming.length > 0 && (
             <section>
-              <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
+              <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-500">
                 <CalendarClock aria-hidden className="size-4" /> Upcoming
               </h2>
               <Card padded={false}>
-                <ul className="divide-y divide-slate-100">
+                <ul className="divide-y divide-line">
                   {upcoming.map((session) => (
                     <li key={session.id} className="flex flex-wrap items-center justify-between gap-3 px-5 py-3">
                       <div>
@@ -232,11 +218,11 @@ export function MarkAttendancePage() {
 
           {rest.length > 0 && (
             <section>
-              <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
+              <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-500">
                 <Info aria-hidden className="size-4" /> Earlier sessions
               </h2>
               <Card padded={false}>
-                <ul className="divide-y divide-slate-100">
+                <ul className="divide-y divide-line">
                   {rest.map((session) => (
                     <li key={session.id} className="flex flex-wrap items-center justify-between gap-3 px-5 py-3">
                       <div>

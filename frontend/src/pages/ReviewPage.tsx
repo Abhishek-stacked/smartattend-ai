@@ -191,7 +191,7 @@ export function ReviewPage() {
               setPage(1);
             }}
             aria-label="Filter by review status"
-            className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm"
+            className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm shadow-control"
           >
             <option value="pending">Pending review</option>
             <option value="resolved">Resolved</option>
@@ -205,7 +205,7 @@ export function ReviewPage() {
               setPage(1);
             }}
             aria-label="Filter by outcome"
-            className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm"
+            className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm shadow-control"
           >
             <option value="">Any outcome</option>
             <option value="low_confidence">Uncertain match</option>
@@ -230,7 +230,7 @@ export function ReviewPage() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[980px] text-left text-sm">
               <caption className="sr-only">Recognition events awaiting review</caption>
-              <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+              <thead className="bg-slate-50 text-xs text-slate-500">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-medium">When</th>
                   <th scope="col" className="px-4 py-3 font-medium">Session</th>
@@ -241,7 +241,7 @@ export function ReviewPage() {
                   <th scope="col" className="px-4 py-3 text-right font-medium">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-line">
                 {items.map((event) => (
                   <tr key={event.id} className="align-top hover:bg-slate-50/60">
                     <td className="whitespace-nowrap px-4 py-3 text-slate-600">
@@ -350,7 +350,7 @@ export function ReviewPage() {
       >
         {selected && (
           <form id="resolve-event" onSubmit={resolve} className="space-y-4">
-            <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
+            <div className="rounded-lg border border-line bg-slate-50 p-3 text-sm text-slate-600">
               <p className="flex items-start gap-2">
                 <ShieldAlert aria-hidden className="mt-0.5 size-4 shrink-0 text-amber-600" />
                 <span>

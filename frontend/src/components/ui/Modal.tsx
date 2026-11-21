@@ -50,12 +50,8 @@ export function Modal({
   const width = { sm: "max-w-sm", md: "max-w-lg", lg: "max-w-2xl" }[size];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/75 p-0 backdrop-blur-sm sm:items-center sm:p-4">
-      <div
-        className="absolute inset-0"
-        aria-hidden
-        onClick={onClose}
-      />
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/65 p-0 backdrop-blur-[2px] sm:items-center sm:p-4">
+      <div className="absolute inset-0" aria-hidden onClick={onClose} />
       <div
         ref={panelRef}
         role="dialog"
@@ -63,31 +59,23 @@ export function Modal({
         aria-labelledby={titleId}
         tabIndex={-1}
         className={cx(
-          "anim-pop relative w-full border-2 border-slate-300 bg-panel shadow-float outline-none",
+          "anim-pop relative w-full rounded-t-none border border-line-strong bg-panel shadow-float sm:rounded-xl",
           width,
         )}
       >
-        <header className="flex items-start justify-between gap-4 border-b-2 border-slate-200 px-5 py-4">
-          <div>
-            <h2
-              id={titleId}
-              className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-slate-900"
-            >
+        <header className="flex items-start justify-between gap-4 border-b border-line px-5 py-4">
+          <div className="min-w-0">
+            <h2 id={titleId} className="text-[15px] font-semibold text-fg">
               {title}
             </h2>
-            {description && <p className="mt-1 text-sm text-slate-500">{description}</p>}
+            {description && <p className="mt-1 text-[13px] leading-snug text-fg-muted">{description}</p>}
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="border-2 border-transparent p-1 text-slate-400 transition hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900"
-            aria-label="Close dialog"
-          >
-            <X aria-hidden className="size-5" />
+          <button type="button" onClick={onClose} className="icon-button size-8 shrink-0" aria-label="Close dialog">
+            <X aria-hidden className="size-4.5" />
           </button>
         </header>
         <div className="max-h-[70vh] overflow-y-auto px-5 py-4">{children}</div>
-        {footer && <footer className="flex justify-end gap-2 border-t-2 border-slate-200 px-5 py-3">{footer}</footer>}
+        {footer && <footer className="flex justify-end gap-2 border-t border-line px-5 py-3.5">{footer}</footer>}
       </div>
     </div>
   );

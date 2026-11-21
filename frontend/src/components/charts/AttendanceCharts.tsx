@@ -13,6 +13,22 @@ import {
 import { STATUS_COLORS } from "../../lib/reportColors";
 import type { AttendanceStatus, TrendPoint } from "../../lib/types";
 
+/* Chart chrome is painted by SVG attributes, so it cannot read the CSS custom
+   properties in index.css. These literals mirror --color-line, --color-raised,
+   --color-fg-muted and --shadow-lift; change them together. */
+const GRID = "#22252b";
+const AXIS = "#969cab";
+const TOOLTIP = {
+  borderRadius: 8,
+  border: "1px solid #2f333c",
+  background: "#171a20",
+  boxShadow: "0 12px 28px -14px rgb(0 0 0 / 0.75), 0 2px 6px -2px rgb(0 0 0 / 0.4)",
+  fontSize: 12,
+  padding: "8px 10px",
+  color: "#c9ced8",
+};
+const TOOLTIP_LABEL = { color: "#eef0f4", fontWeight: 600 };
+
 const GRADIENTS: Record<string, [string, string]> = {
   present: ["#34d399", "#059669"],
   late: ["#fbbf24", "#d97706"],
@@ -53,20 +69,13 @@ export function TrendChart({ series }: { series: TrendPoint[] }) {
       <GradientDefs ids={seriesDefs.map(({ status }) => `grad-${status}`)} />
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={series} margin={{ top: 4, right: 8, bottom: 0, left: -18 }}>
-          <CartesianGrid stroke="#22222a" strokeDasharray="3 3" vertical={false} />
-          <XAxis dataKey="label" tick={{ fontSize: 11, fill: "#8b8f99" }} tickLine={false} axisLine={false} />
-          <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: "#8b8f99" }} tickLine={false} axisLine={false} />
+          <CartesianGrid stroke={GRID} strokeDasharray="3 3" vertical={false} />
+          <XAxis dataKey="label" tick={{ fontSize: 11, fill: AXIS }} tickLine={false} axisLine={false} />
+          <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: AXIS }} tickLine={false} axisLine={false} />
           <Tooltip
-            cursor={{ stroke: "#c6f24d", strokeWidth: 1, strokeDasharray: "4 4" }}
-            contentStyle={{
-              borderRadius: 2,
-              border: "2px solid #2c2c34",
-              background: "#131316",
-              boxShadow: "6px 6px 0 0 #000",
-              fontSize: 12,
-              color: "#ced2da",
-            }}
-            labelStyle={{ color: "#f1f2f5", fontWeight: 600 }}
+            cursor={{ stroke: "#3b4048", strokeWidth: 1, strokeDasharray: "4 4" }}
+            contentStyle={TOOLTIP}
+            labelStyle={TOOLTIP_LABEL}
           />
           {seriesDefs.map(({ status, key, label }) => (
             <Area
@@ -79,7 +88,7 @@ export function TrendChart({ series }: { series: TrendPoint[] }) {
               strokeWidth={2}
               fill={`url(#grad-${status})`}
               fillOpacity={1}
-              activeDot={{ r: 4, strokeWidth: 2, stroke: "#08080a" }}
+              activeDot={{ r: 4, strokeWidth: 2, stroke: "#101216" }}
             />
           ))}
         </AreaChart>
@@ -115,17 +124,7 @@ export function StatusPie({ slices }: { slices: StatusSlice[] }) {
               <Cell key={slice.status} fill={`url(#pie-${slice.status})`} />
             ))}
           </Pie>
-          <Tooltip
-            contentStyle={{
-              borderRadius: 2,
-              border: "2px solid #2c2c34",
-              background: "#131316",
-              boxShadow: "6px 6px 0 0 #000",
-              fontSize: 12,
-              color: "#ced2da",
-            }}
-            labelStyle={{ color: "#f1f2f5", fontWeight: 600 }}
-          />
+          <Tooltip contentStyle={TOOLTIP} labelStyle={TOOLTIP_LABEL} />
         </PieChart>
       </ResponsiveContainer>
     </div>

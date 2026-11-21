@@ -22,18 +22,18 @@ export function Switch({
       disabled={disabled}
       onClick={() => onChange(!checked)}
       className={cx(
-        "relative inline-flex h-6 w-12 shrink-0 items-center rounded-xs border-2 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500 disabled:cursor-not-allowed disabled:opacity-50",
-        checked ? "border-brand-500 bg-brand-500" : "border-slate-300 bg-slate-200",
+        "relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-150",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-ink",
+        "disabled:cursor-not-allowed disabled:opacity-50",
+        checked ? "bg-brand-600" : "bg-track hover:bg-track-hover",
         className,
       )}
     >
       <span
         aria-hidden
         className={cx(
-          "inline-block size-4 border-2 transition-transform duration-150",
-          checked
-            ? "translate-x-6 border-[#08080a] bg-[#08080a]"
-            : "translate-x-0.5 border-slate-400 bg-slate-600",
+          "inline-block size-4 rounded-full bg-white shadow-control transition-transform duration-150",
+          checked ? "translate-x-[1.125rem]" : "translate-x-0.5",
         )}
       />
     </button>

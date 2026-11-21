@@ -218,7 +218,7 @@ export function CorrectionsPage() {
               setPage(1);
             }}
             aria-label="Filter by request status"
-            className="h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm shadow-sm"
+            className="h-9 rounded-lg border border-slate-300 bg-raised px-2 text-sm shadow-control"
           >
             <option value="pending">Pending</option>
             <option value="approved">Approved</option>
@@ -247,7 +247,7 @@ export function CorrectionsPage() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[900px] text-left text-sm">
               <caption className="sr-only">Attendance correction requests</caption>
-              <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+              <thead className="bg-slate-50 text-xs text-slate-500">
                 <tr>
                   <th scope="col" className="px-4 py-3 font-medium">Date</th>
                   {!isStudent && <th scope="col" className="px-4 py-3 font-medium">Student</th>}
@@ -257,7 +257,7 @@ export function CorrectionsPage() {
                   <th scope="col" className="px-4 py-3 text-right font-medium">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-line">
                 {items.map((request) => (
                   <tr key={request.id} className="align-top hover:bg-slate-50/60">
                     <td className="whitespace-nowrap px-4 py-3 text-slate-600">

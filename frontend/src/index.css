@@ -1,397 +1,354 @@
 @import "tailwindcss";
 
+/* ===========================================================================
+   SmartAttend AI - design system
+
+   Three layers, top to bottom:
+     1. @theme tokens      - colour, shadow and motion primitives
+     2. semantic aliases   - fg / muted / line / surface (use these in new code)
+     3. component classes  - .panel, .field-label, buttons, tables
+
+   Surfaces are separated by 1px hairlines and depth-cued shadows, never by
+   thick borders or hard offset shadows. Type hierarchy is carried by size and
+   weight; mono is reserved for identifiers (roll numbers, timestamps, codes)
+   where a fixed advance width actually helps.
+   =========================================================================== */
+
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
     sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, "Courier New", monospace;
 
-  /* ---------------------------------------------------------------------
-     INK / SILVER. The theme is dark by construction: the slate ramp is
-     inverted, so every `text-slate-900` in a page becomes near-white and
-     every `bg-slate-50` becomes a near-black surface. One ramp, whole app.
-     --------------------------------------------------------------------- */
+  /* --- Surfaces -----------------------------------------------------------
+     Ink is the app canvas, panel is a card, raised is a control or hover
+     state, inset is a well (inputs, table headers). */
+  --color-ink: #08090c;
+  --color-panel: #101216;
+  --color-raised: #171a20;
+  --color-inset: #0b0d11;
+  --color-edge: #22252b;
+  --color-chalk: #eef0f4;
 
-  --color-ink: #08080a;
-  --color-panel: #131316;
-  --color-edge: #2c2c34;
-  --color-chalk: #f4f5f7;
+  /* --- Intent -------------------------------------------------------------
+     Indigo is the product colour. It must never double as "present": green,
+     amber and rose are reserved for attendance status, so the accent has to
+     sit outside that axis or a status badge becomes indistinguishable from a
+     primary button. */
+  --color-brand-50: #eef0ff;
+  --color-brand-100: #dfe3ff;
+  --color-brand-200: #c5cbfe;
+  --color-brand-300: #a2a9fb;
+  --color-brand-400: #7d84f7;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+  --color-brand-800: #3730a3;
+  --color-brand-900: #312e81;
 
-  --color-slate-50: #0e0e11;
-  --color-slate-100: #16161a;
-  --color-slate-200: #1f1f25;
-  --color-slate-300: #2c2c34;
-  --color-slate-400: #7d818b;
-  --color-slate-500: #9aa0ab;
-  --color-slate-600: #b8bdc7;
-  --color-slate-700: #ced2da;
-  --color-slate-800: #e0e3e8;
-  --color-slate-900: #f1f2f5;
-  --color-slate-950: #ffffff;
+  /* Neutral second accent, used for metallic and muted fills. */
+  --color-accent-50: #f3f4f7;
+  --color-accent-100: #e5e7ec;
+  --color-accent-200: #d2d6de;
+  --color-accent-300: #b6bcc7;
+  --color-accent-400: #969cab;
+  --color-accent-500: #767d8d;
+  --color-accent-600: #5d6474;
+  --color-accent-700: #484e5c;
+  --color-accent-800: #363b47;
+  --color-accent-900: #272b34;
 
-  /* Acid lime: the one saturated colour in the system. Used as a block, never
-     as a gradient — a flat fill with black type on top. */
-  --color-brand-50: #171d0a;
-  --color-brand-100: #1e260d;
-  --color-brand-200: #35410f;
-  --color-brand-300: #86a52e;
-  --color-brand-400: #a8cf3a;
-  --color-brand-500: #c6f24d;
-  --color-brand-600: #d3fa6b;
-  --color-brand-700: #e2ff9b;
-  --color-brand-800: #edffc6;
-  --color-brand-900: #f5ffe4;
+  /* --- Semantic aliases --------------------------------------------------- */
+  --color-fg: #e9ebf0;
+  --color-fg-muted: #969cab;
+  --color-fg-faint: #697080;
+  --color-line: #22252b;
+  --color-line-strong: #2f333c;
+  --color-line-hover: #3b4048;
+  --color-surface-hover: #1d212a;
+  --color-surface-pressed: #171a20;
+  --color-track: #2b2f37;
+  --color-track-hover: #343945;
+  --color-ring: #6366f1;
 
-  /* Steel: the second accent, for anything that must read as metal. */
-  --color-accent-50: #f2f4f7;
-  --color-accent-100: #e6e9ee;
-  --color-accent-200: #d3d8e0;
-  --color-accent-300: #b9c0cb;
-  --color-accent-400: #9aa3b0;
-  --color-accent-500: #7b8494;
-  --color-accent-600: #626b7a;
-  --color-accent-700: #4d5563;
-  --color-accent-800: #3a414c;
-  --color-accent-900: #2b3038;
+  /* --- Legacy inverted ramp ------------------------------------------------
+     Most page components were written before this theme existed and name
+     colour by lightness ("text-slate-900" for primary copy, "bg-slate-50" for
+     a control well). The ramp is therefore inverted: 50 is the darkest
+     surface and 900 the brightest ink. Kept so ~450 existing call sites stay
+     correct. New code should use fg / fg-muted / line / panel instead. */
+  --color-slate-50: #0b0d11;
+  --color-slate-100: #101216;
+  --color-slate-200: #171a20;
+  --color-slate-300: #22252b;
+  --color-slate-400: #697080;
+  --color-slate-500: #969cab;
+  --color-slate-600: #b1b7c3;
+  --color-slate-700: #c9ced8;
+  --color-slate-800: #dfe2e8;
+  --color-slate-900: #eef0f4;
+  --color-slate-950: #f8f9fb;
 
-  /* White is redefined as the panel colour, because `text-white` in this
-     codebase means "on a coloured fill" (a lime button), which wants black
-     type here. Genuine white is `--color-chalk` / `text-chalk`. */
-  --color-white: #131316;
+  /* --- Depth ---------------------------------------------------------------
+     Two-part shadows: a tight contact shadow for separation, plus a wide
+     diffuse one for elevation. Nothing is drawn with a solid black plate. */
+  --shadow-surface: 0 1px 2px 0 rgb(0 0 0 / 0.45);
+  --shadow-lift: 0 12px 28px -14px rgb(0 0 0 / 0.75), 0 2px 6px -2px rgb(0 0 0 / 0.4);
+  --shadow-float: 0 32px 64px -24px rgb(0 0 0 / 0.85), 0 8px 20px -8px rgb(0 0 0 / 0.55);
+  --shadow-control: 0 1px 2px 0 rgb(0 0 0 / 0.35);
+  --shadow-glow: 0 0 0 3px rgb(99 102 241 / 0.28);
 
-  /* Depth: no blur. Every surface throws a solid black plate. */
-  --shadow-surface: 8px 8px 0 0 #000;
-  --shadow-lift: 12px 12px 0 0 #000;
-  --shadow-float: 16px 16px 0 0 #000;
-  --shadow-glow: 5px 5px 0 0 #000, 0 0 0 2px var(--color-brand-500);
-  --shadow-control: 5px 5px 0 0 #000;
-
-  /* Corners: nearly square. `rounded-xl` on an input is 2px here. */
-  --radius-xs: 1px;
-  --radius-sm: 2px;
-  --radius-md: 2px;
-  --radius-lg: 2px;
-  --radius-xl: 3px;
-  --radius-2xl: 4px;
-  --radius-3xl: 6px;
+  /* Corners follow the Tailwind scale: controls at 8px, cards at 12px. */
 }
 
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
     color-scheme: dark;
-    scrollbar-color: #3a3a44 #08080a;
+    scrollbar-color: #2b2f36 #08090c;
+    scrollbar-width: thin;
   }
+
   body {
-    @apply text-slate-900 antialiased;
+    @apply text-fg antialiased;
     background-color: var(--color-ink);
-    background-image:
-      radial-gradient(64rem 42rem at 12% -12%, rgba(198, 242, 77, 0.09), transparent 62%),
-      radial-gradient(52rem 38rem at 102% 4%, rgba(185, 192, 203, 0.1), transparent 58%),
-      linear-gradient(180deg, #0a0a0c 0%, #08080a 48%, #0b0b0e 100%);
-    background-attachment: fixed;
+    /* One static wash at the top of the page. It reads as lighting, not as a
+       decoration layer, and costs nothing to composite. */
+    background-image: radial-gradient(
+      72rem 36rem at 50% -18rem,
+      rgb(99 102 241 / 0.09),
+      transparent 70%
+    );
+    background-repeat: no-repeat;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    text-rendering: optimizeLegibility;
   }
-  /* The drawing board: a hairline grid that drifts, masked away from the edges. */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: -60px;
-    z-index: -1;
-    pointer-events: none;
-    background-image:
-      linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-    background-size: 44px 44px;
-    mask-image: radial-gradient(130% 110% at 50% 0%, #000 15%, transparent 82%);
-    -webkit-mask-image: radial-gradient(130% 110% at 50% 0%, #000 15%, transparent 82%);
-    animation: grid-drift 22s linear infinite;
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    /* Tighten tracking as type gets larger; the default 0 looks loose at 24px+. */
+    letter-spacing: -0.0175em;
+    text-wrap: balance;
   }
+
   :focus-visible {
-    outline: 2px solid var(--color-brand-500);
+    outline: 2px solid var(--color-ring);
     outline-offset: 2px;
+    border-radius: 2px;
   }
+
   ::selection {
-    background: var(--color-brand-500);
-    color: #08080a;
+    background: rgb(99 102 241 / 0.35);
+    color: #ffffff;
   }
+
   ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
   }
   ::-webkit-scrollbar-track {
-    background: #08080a;
+    background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: #33333c;
-    border: 2px solid #08080a;
+    background: #2b2f36;
+    border: 3px solid var(--color-ink);
+    border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #4a4a56;
+    background: #3b4048;
   }
-  /* Chrome paints the native date/time picker glyph in near-black regardless of
-     color-scheme; invert it so it reads on the dark field. */
+
+  /* The native date/time picker glyph is painted near-black regardless of
+     color-scheme; invert it so it reads on a dark field. */
   input[type="date"]::-webkit-calendar-picker-indicator,
   input[type="time"]::-webkit-calendar-picker-indicator,
   input[type="datetime-local"]::-webkit-calendar-picker-indicator,
   input[type="month"]::-webkit-calendar-picker-indicator {
-    filter: invert(1) brightness(1.6);
-    opacity: 0.6;
+    filter: invert(0.85);
+    opacity: 0.55;
     cursor: pointer;
   }
   input[type="date"]::-webkit-calendar-picker-indicator:hover,
   input[type="time"]::-webkit-calendar-picker-indicator:hover,
   input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
-    opacity: 1;
+    opacity: 0.9;
   }
-  /* The drop-down list of a native <select> is drawn by the OS. */
+
+  /* The option list of a native <select> is painted by the OS. */
   select option {
-    background-color: var(--color-panel);
-    color: var(--color-slate-900);
+    background-color: var(--color-raised);
+    color: var(--color-fg);
   }
 }
 
 @layer components {
-  /* Small caps label used for every eyebrow, section tag and table header. */
-  .label-mono {
+  /* Small label above a control or section. Sentence case, no tracking game. */
+  .field-label {
+    display: block;
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    color: var(--color-fg-muted);
+  }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.005em;
+    color: var(--color-fg-muted);
+  }
+
+  /* Tabular figures for anything a user compares down a column. */
+  .num {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+
+  /* An identifier: roll number, session code, timestamp. Mono is for these. */
+  .ident {
     font-family: var(--font-mono);
-    font-size: 0.66rem;
-    line-height: 1.2;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: #8b8f99;
+    font-size: 0.8125rem;
+    font-variant-ligatures: none;
+    color: var(--color-fg-muted);
   }
 
-  /* Metal sheen for the wordmark. Not a rainbow — a brushed gradient. */
-  .text-aurora {
-    background-image: linear-gradient(100deg, #f4f5f7 0%, #b9c0cb 34%, #ffffff 52%, #8e96a3 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  .text-lime {
-    color: var(--color-brand-500);
-  }
-
-  /* Flat translucent slab used over the dark shell and the login artwork. */
-  .glass {
-    background-color: rgba(255, 255, 255, 0.035);
-    border: 2px solid var(--color-edge);
-    backdrop-filter: blur(6px);
-  }
-
-  /* The product surface: an opaque plate with a 2px edge and a solid shadow. */
+  /* The product surface. */
   .panel {
-    position: relative;
     background-color: var(--color-panel);
-    border: 2px solid var(--color-edge);
+    border: 1px solid var(--color-line);
+    border-radius: 0.75rem;
     box-shadow: var(--shadow-surface);
-    transition:
-      transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
-      border-color 0.2s ease;
   }
 
-  .panel-lift:hover {
-    transform: translate(-3px, -3px);
-    box-shadow: 13px 13px 0 0 #000;
-    border-color: #3d3d49;
-  }
-
-  /* Lime rule along the top edge of a panel. */
-  .panel-edge::before {
-    content: "";
-    position: absolute;
-    left: -2px;
-    right: -2px;
-    top: -2px;
-    height: 3px;
-    background-image: linear-gradient(90deg, var(--color-brand-500), #6f7d3a 46%, transparent 88%);
-  }
-
-  /* Soft colour field behind dark surfaces. */
-  .orb {
-    position: absolute;
-    border-radius: 9999px;
-    filter: blur(60px);
-    opacity: 0.7;
-    pointer-events: none;
-  }
-
-  /* 3D press: the control sinks into its own shadow. */
-  .press-3d {
-    transition:
-      transform 0.16s cubic-bezier(0.22, 1, 0.36, 1),
-      box-shadow 0.16s ease,
-      background-color 0.16s ease,
-      border-color 0.16s ease;
-  }
-  .press-3d:active:not(:disabled) {
-    transform: translate(4px, 4px);
-    box-shadow: none;
-  }
-
-  /* Entrance animation. Set --d on the element to stagger it. */
-  .anim-rise {
-    animation: rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-delay: var(--d, 0ms);
-  }
-  .anim-fade {
-    animation: fade 0.4s ease both;
-    animation-delay: var(--d, 0ms);
-  }
-  .anim-pop {
-    animation: pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-    animation-delay: var(--d, 0ms);
-  }
-
-  /* A slow vertical scan across a panel. */
-  .scan::after {
+  /* A single accent hairline above a card, to mark its header. */
+  .panel-accent::before {
     content: "";
     position: absolute;
     inset-inline: 0;
-    top: 0;
-    height: 28%;
-    pointer-events: none;
-    background-image: linear-gradient(180deg, transparent, rgba(198, 242, 77, 0.07) 60%, transparent);
-    animation: scan 6.5s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    top: -1px;
+    height: 1px;
+    background-image: linear-gradient(90deg, rgb(99 102 241 / 0.7), rgb(99 102 241 / 0));
   }
 
-  /* Perspective floor: the "3D room" behind the login artwork. */
-  .floor {
-    position: absolute;
-    inset: auto -20% -12% -20%;
-    height: 62%;
-    perspective: 420px;
-    pointer-events: none;
-    mask-image: linear-gradient(180deg, transparent, #000 35%, transparent 92%);
-    -webkit-mask-image: linear-gradient(180deg, transparent, #000 35%, transparent 92%);
-  }
-  .floor::before {
-    content: "";
-    position: absolute;
-    inset: -40% -40%;
-    transform: rotateX(72deg);
-    transform-origin: 50% 100%;
-    background-image:
-      linear-gradient(to right, rgba(198, 242, 77, 0.22) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(198, 242, 77, 0.22) 1px, transparent 1px);
-    background-size: 62px 62px;
-    animation: floor-run 7s linear infinite;
-  }
-
-  /* Wireframe cube: six labelled faces, one slow rotation. */
-  .scene {
-    perspective: 900px;
-  }
-  .cube {
-    position: relative;
-    width: 168px;
-    height: 168px;
-    transform-style: preserve-3d;
-    animation: spin-3d 20s linear infinite;
-  }
-  .cube-face {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    border: 2px solid #34343e;
-    background-color: rgba(19, 19, 22, 0.92);
-    /* Without this the three rear faces paint through and their labels read
-       backwards through the box. */
-    backface-visibility: hidden;
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    letter-spacing: 0.22em;
-    color: var(--color-brand-500);
-  }
-  .cube-face:nth-child(1) {
-    transform: translateZ(84px);
-  }
-  .cube-face:nth-child(2) {
-    transform: rotateY(180deg) translateZ(84px);
-  }
-  .cube-face:nth-child(3) {
-    transform: rotateY(90deg) translateZ(84px);
-  }
-  .cube-face:nth-child(4) {
-    transform: rotateY(-90deg) translateZ(84px);
-  }
-  .cube-face:nth-child(5) {
-    transform: rotateX(90deg) translateZ(84px);
-  }
-  .cube-face:nth-child(6) {
-    transform: rotateX(-90deg) translateZ(84px);
-  }
-
-  /* Marquee strip. The track holds the text twice; the second copy fills the gap. */
-  .ticker {
-    overflow: hidden;
-    border-block: 2px solid var(--color-edge);
-  }
-  .ticker-track {
-    display: flex;
-    width: max-content;
-    animation: ticker 26s linear infinite;
-  }
-  .ticker:hover .ticker-track {
-    animation-play-state: paused;
-  }
-
-  .live-dot {
-    animation: blink 1.8s ease-in-out infinite;
-  }
-
-  /* The login credentials slab: a thin plate of card, tilted in space until
-     you point at it, then it squares up. */
-  .slab-3d {
-    transform: perspective(1500px) rotateY(-6deg) rotateX(2deg);
-    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-    transform-style: preserve-3d;
-  }
-  .slab-3d:hover,
-  .slab-3d:focus-within {
-    transform: perspective(1500px) rotateY(0deg) rotateX(0deg);
-  }
-  .slab-3d input,
-  .slab-3d button {
-    transform: translateZ(0);
-  }
-
-  /* A numbered rule in the left-hand spec list. */
-  .spec-row {
-    display: grid;
-    grid-template-columns: 2.25rem 1fr;
-    gap: 0.9rem;
-    align-items: start;
-    border-top: 2px solid #1f1f25;
-    padding: 0.9rem 0;
+  /* Shared control chrome: every input, select and textarea uses this. */
+  .control {
+    display: block;
+    width: 100%;
+    background-color: var(--color-inset);
+    border: 1px solid var(--color-line-strong);
+    border-radius: 0.5rem;
+    color: var(--color-fg);
     transition:
-      border-color 0.2s ease,
-      transform 0.2s ease;
+      border-color 0.15s ease,
+      box-shadow 0.15s ease,
+      background-color 0.15s ease;
   }
-  .spec-row:hover {
-    border-color: #34343e;
-    transform: translateX(3px);
+  .control::placeholder {
+    color: var(--color-fg-faint);
+  }
+  .control:hover:not(:disabled):not(:focus) {
+    border-color: var(--color-line-hover);
+  }
+  .control:focus {
+    outline: none;
+    border-color: var(--color-brand-500);
+    box-shadow: var(--shadow-glow);
+  }
+  .control:disabled {
+    cursor: not-allowed;
+    background-color: var(--color-panel);
+    color: var(--color-fg-faint);
+  }
+  .control-invalid,
+  .control-invalid:focus {
+    border-color: rgb(244 63 94 / 0.7);
+    box-shadow: 0 0 0 3px rgb(244 63 94 / 0.2);
+  }
+
+  /* Icon-only button in a toolbar. */
+  .icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+    color: var(--color-fg-muted);
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease,
+      border-color 0.15s ease;
+  }
+  .icon-button:hover:not(:disabled) {
+    background-color: var(--color-raised);
+    border-color: var(--color-line);
+    color: var(--color-fg);
+  }
+  .icon-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /* Table chrome. Header is an inset well; rows separate on hover only. */
+  .data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    text-align: left;
+    font-size: 0.875rem;
+  }
+  .data-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: var(--color-inset);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-fg-muted);
+    border-bottom: 1px solid var(--color-line);
+    white-space: nowrap;
+  }
+  .data-table tbody td {
+    padding: 0.625rem 0.75rem;
+    border-bottom: 1px solid rgb(34 37 43 / 0.66);
+    vertical-align: middle;
+  }
+  .data-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+  .data-table tbody tr {
+    transition: background-color 0.12s ease;
+  }
+  .data-table tbody tr:hover {
+    background-color: rgb(23 26 32 / 0.6);
+  }
+
+  /* Entrance motion. Short, small, and never staggered beyond ~150ms. */
+  .anim-rise {
+    animation: rise 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--d, 0ms);
+  }
+  .anim-fade {
+    animation: fade 0.2s ease both;
+    animation-delay: var(--d, 0ms);
+  }
+  .anim-pop {
+    animation: pop 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: var(--d, 0ms);
+  }
+
+  /* A session that is genuinely recording right now. */
+  .live-dot {
+    position: relative;
+    animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 }
 
-@keyframes grid-drift {
-  from {
-    background-position:
-      0 0,
-      0 0;
-  }
-  to {
-    background-position:
-      0 528px,
-      528px 0;
-  }
-}
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translate3d(0, 16px, 0);
+    transform: translate3d(0, 6px, 0);
   }
   to {
     opacity: 1;
@@ -409,64 +366,20 @@
 @keyframes pop {
   from {
     opacity: 0;
-    transform: scale(0.96);
+    transform: scale(0.985);
   }
   to {
     opacity: 1;
     transform: none;
   }
 }
-@keyframes scan {
-  0% {
-    transform: translateY(-120%);
-    opacity: 0;
-  }
-  12% {
-    opacity: 1;
-  }
-  70% {
-    opacity: 0.7;
-  }
-  100% {
-    transform: translateY(420%);
-    opacity: 0;
-  }
-}
-@keyframes floor-run {
-  from {
-    background-position:
-      0 0,
-      0 0;
-  }
-  to {
-    background-position:
-      0 0,
-      0 620px;
-  }
-}
-@keyframes spin-3d {
-  from {
-    transform: rotateX(-16deg) rotateY(0deg);
-  }
-  to {
-    transform: rotateX(-16deg) rotateY(360deg);
-  }
-}
-@keyframes ticker {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-@keyframes blink {
+@keyframes pulse-soft {
   0%,
   100% {
     opacity: 1;
   }
   50% {
-    opacity: 0.15;
+    opacity: 0.45;
   }
 }
 
@@ -478,14 +391,5 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-  .panel-lift:hover {
-    transform: none;
-  }
-  .cube,
-  .floor::before,
-  .ticker-track,
-  body::before {
-    animation: none !important;
   }
 }

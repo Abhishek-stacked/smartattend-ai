@@ -269,7 +269,7 @@ export function LivePage() {
               <Badge tone={sessionTone(session.status)}>{sessionLabel(session.status)}</Badge>
               <Link
                 to={`/sessions/${session.id}`}
-                className="text-sm font-medium text-brand-700 hover:text-brand-800"
+                className="text-sm font-medium text-brand-200 hover:text-brand-100"
               >
                 Session detail
               </Link>
@@ -331,7 +331,7 @@ export function LivePage() {
               ? "Pick a session to start the camera station."
               : "No session is active right now. Start a scheduled session from "}
             {activeSessions.length === 0 && (
-              <Link to="/sessions" className="font-medium text-brand-700 hover:text-brand-800">
+              <Link to="/sessions" className="font-medium text-brand-200 hover:text-brand-100">
                 sessions
               </Link>
             )}
@@ -379,7 +379,7 @@ export function LivePage() {
               )
             }
           >
-            <div className="relative overflow-hidden rounded-lg border-2 border-slate-300 bg-black">
+            <div className="relative overflow-hidden rounded-lg border border-slate-300 bg-black">
               <video
                 ref={camera.videoRef}
                 muted
@@ -394,7 +394,7 @@ export function LivePage() {
                     return (
                       <div
                         key={`${result.event_id ?? "frame"}-${index}`}
-                        className={cx("absolute rounded-md border-2", BOX_STYLES[result.outcome])}
+                        className={cx("absolute rounded-md border", BOX_STYLES[result.outcome])}
                         style={{
                           left: `${(x / frame.width) * 100}%`,
                           top: `${(y / frame.height) * 100}%`,
@@ -402,7 +402,7 @@ export function LivePage() {
                           height: `${(height / frame.height) * 100}%`,
                         }}
                       >
-                        <span className="absolute -top-6 left-0 max-w-full truncate border border-brand-500 bg-black/85 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-chalk">
+                        <span className="absolute -top-7 left-0 max-w-full truncate rounded-md rounded-bl-none bg-black/80 px-2 py-0.5 text-[11px] font-medium text-white ring-1 ring-white/15">
                           {result.student?.full_name ?? OUTCOME_LABELS[result.outcome]}
                         </span>
                       </div>
@@ -476,7 +476,7 @@ export function LivePage() {
                 description="Start scanning while students present themselves to the camera."
               />
             ) : (
-              <ul className="divide-y divide-slate-100">
+              <ul className="divide-y divide-line">
                 {feed.map((entry) => (
                   <li key={entry.id} className="flex items-start gap-3 px-4 py-3">
                     <Badge tone={OUTCOME_TONES[entry.outcome]}>{OUTCOME_LABELS[entry.outcome]}</Badge>
@@ -534,7 +534,7 @@ export function LivePage() {
               />
             </div>
           ) : (
-            <ul className="max-h-[560px] divide-y divide-slate-100 overflow-y-auto">
+            <ul className="max-h-[560px] divide-y divide-line overflow-y-auto">
               {sortedRoster.map((entry) => (
                 <li key={entry.student_id} className="px-4 py-3">
                   <div className="flex items-start justify-between gap-2">

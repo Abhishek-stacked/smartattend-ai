@@ -83,21 +83,21 @@ export function ProfilePage() {
             <div className="flex items-start gap-3">
               <UserRound aria-hidden className="mt-0.5 size-4 text-slate-400" />
               <div>
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Full name</dt>
+                <dt className="text-xs text-slate-500">Full name</dt>
                 <dd className="font-medium text-slate-900">{user.full_name}</dd>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <Mail aria-hidden className="mt-0.5 size-4 text-slate-400" />
               <div>
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Email</dt>
+                <dt className="text-xs text-slate-500">Email</dt>
                 <dd className="font-medium text-slate-900">{user.email}</dd>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <ShieldCheck aria-hidden className="mt-0.5 size-4 text-slate-400" />
               <div>
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Role</dt>
+                <dt className="text-xs text-slate-500">Role</dt>
                 <dd className="mt-1">
                   <Badge tone="brand">{roleLabel(user.role)}</Badge>
                 </dd>
@@ -106,7 +106,7 @@ export function ProfilePage() {
             <div className="flex items-start gap-3">
               <KeyRound aria-hidden className="mt-0.5 size-4 text-slate-400" />
               <div>
-                <dt className="text-xs uppercase tracking-wide text-slate-500">Last sign-in</dt>
+                <dt className="text-xs text-slate-500">Last sign-in</dt>
                 <dd className="font-medium text-slate-900">{formatDateTime(user.last_login_at)}</dd>
               </div>
             </div>
@@ -166,7 +166,7 @@ export function ProfilePage() {
               <div className="space-y-4 text-sm">
                 <dl className="grid gap-4 sm:grid-cols-3">
                   <div>
-                    <dt className="text-xs uppercase tracking-wide text-slate-500">Consent</dt>
+                    <dt className="text-xs text-slate-500">Consent</dt>
                     <dd className="mt-1">
                       {enrollment.consent?.status === "granted" ? (
                         <Badge tone="success">Granted</Badge>
@@ -178,11 +178,11 @@ export function ProfilePage() {
                     </dd>
                   </div>
                   <div>
-                    <dt className="text-xs uppercase tracking-wide text-slate-500">Templates</dt>
+                    <dt className="text-xs text-slate-500">Templates</dt>
                     <dd className="mt-1 font-medium text-slate-900">{enrollment.template_count}</dd>
                   </div>
                   <div>
-                    <dt className="text-xs uppercase tracking-wide text-slate-500">Registered</dt>
+                    <dt className="text-xs text-slate-500">Registered</dt>
                     <dd className="mt-1 font-medium text-slate-900">{formatDateTime(enrollment.enrolled_at)}</dd>
                   </div>
                 </dl>
